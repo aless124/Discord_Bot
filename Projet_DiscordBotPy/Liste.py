@@ -83,4 +83,18 @@ class list_chained_sorted:
                 current.data,current.next_node.data = current.next_node.data,current.data
             else:
                 current = current.next_node
-                    
+        return self.first_node
+    
+class Stack:
+    def __init__(self) -> None:
+        self.list = list_chained_sorted()
+    def push(self,data):
+        self.list.append(data)
+    def pop(self):
+        self.list.insert_first(None)
+    def size(self):
+        return self.list.size()
+    def tri(self):
+        return self.list.tri()
+    def peek(self):
+        return self.list.first_node.data

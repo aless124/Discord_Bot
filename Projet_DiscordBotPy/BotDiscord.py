@@ -43,6 +43,7 @@ async def delete(ctx,nbr_msg : int):
         return
     
     await ctx.channel.purge(limit = nbr_msg)
+    Historique.append("Delete")
 
 @bot.command(name="delete_historique")
 async def delete_historique(ctx):
@@ -50,21 +51,44 @@ async def delete_historique(ctx):
     Historique = []
     await ctx.response.send_message("History deleted")
     return
+@bot.command(name="commande_liste")
+async def commande(ctx):
+    global Historique
+    Commands = "**Help \n Hello \n Historique \n delete \n delete_historique \n hello_setup**"
+    await ctx.response.send_message("Liste des commandes : \n " +Commands  + "\n prefix : **;**")
+    Historique.append("commande_liste")
 
+    return
+
+@bot.command(name="ChatBot")
+async def chatbot(ctx):
+    Historique.append("ChatBot")
+    await ctx.response.send_message("ChatBot **On**")
+    def check(m):     
+        return m.author == ctx.author and m.channel == ctx.channel
+    
+    msg = await client.wait_for('message', check=check)
+    await ctx.response.send_message(msg.content)
+    
+
+    return
 ## To Do
 
 @bot.command(name="plus_ou_moins")
 async def plus_ou_moins(ctx):
+    Historique.append("plus_ou_moins")
     await ctx.response.send_message("Plus ou moins choisit")
     return
 
 @bot.command(name="pendu")
 async def pendu(ctx):
+    Historique.append("pendu")
     await ctx.response.send_message("Pendu choisit")
     return
 
 @bot.command(name="chifoumi")
 async def chifoumi(ctx):
+    Historique.append("chifoumi")
     await ctx.response.send_message("Chifoumi choisit")
     return
 
@@ -90,6 +114,7 @@ async def on_message(message):
         if message.author == client.user:
             return  
         elif(message.content == "help"):
+            Historique.append("Help")
             await message.channel.send(Commands)
 
         elif(message.content == "historique") :
@@ -98,7 +123,7 @@ async def on_message(message):
         
         elif(message.content == "hello"):
             await message.channel.send("Bonjour ! Hi ! \n Enter ;Help for more information")
-
+            Historique.append("Hello")
         elif(message.content == "hello_setup"):
 
             Historique.append(message.content)
@@ -123,7 +148,6 @@ async def on_message(message):
                 Language = "language set to English ( default) due to wrong input"
                 await message.channel.send(f'{msg.author}! {Language} choosen !')
                 Language = "English"    
-            Historique.append(Language)
 
     #await client.process_commands(message)
 
