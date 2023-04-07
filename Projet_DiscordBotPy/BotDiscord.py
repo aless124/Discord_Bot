@@ -1,4 +1,5 @@
 
+import Liste
 import discord
 import os
 from dotenv import load_dotenv
@@ -6,6 +7,7 @@ from discord import app_commands
 from discord.ext import commands
 import time
 
+NewDoublyLinkedList = Liste.doublyLinkedList()
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
@@ -17,7 +19,7 @@ client = discord.Client(intents=intents)
 # Global Variable 
 bot = app_commands.CommandTree(client)
 
-Historique = []
+Historique = Liste.doublyLinkedList()
 prefix = ";"
 
 # Client Event
