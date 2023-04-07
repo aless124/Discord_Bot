@@ -7,7 +7,6 @@ from discord import app_commands
 from discord.ext import commands
 import time
 
-NewDoublyLinkedList = Liste.doublyLinkedList()
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
@@ -50,7 +49,7 @@ async def delete(ctx,nbr_msg : int):
 @bot.command(name="delete_historique")
 async def delete_historique(ctx):
     global Historique
-    Historique = []
+    Historique = Liste.doublyLinkedList()
     await ctx.response.send_message("History deleted")
     return
 @bot.command(name="commande_liste")

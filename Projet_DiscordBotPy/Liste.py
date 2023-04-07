@@ -9,7 +9,7 @@ class Node:
 class doublyLinkedList:
     def __init__(self):
         self.start_node = None
-        self.size = 1
+        self.size = 0
     
     # Insert Element to Empty list
     def InsertToEmptyList(self, data):
@@ -63,8 +63,8 @@ class doublyLinkedList:
         n.prev.next = None
     # Traversing and Displaying each element of the list
     def DeleteAll(self):       
-        for i in range(self.size_liste()-4):
-
+        for _ in range(self.size_liste()-1):
+            self.size -= 1
             if self.start_node is None:
                 print("The Linked list is empty, no element to delete")
                 return 
