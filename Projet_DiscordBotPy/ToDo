@@ -1,7 +1,20 @@
 Fonctionnalité du bot 
 
+1 - Via une liste chainée, une pile ou une file, créer un système de d'historique des commandes de votre bot. Ce système devra avoir comme fonctionnalités :
+    - de quoi voir la dernière commande rentrée
+    - de quoi voir toutes les commandes rentrée par un utilisateur depuis sa première connexion
+    - de quoi se déplacer dans cet historique (en avant et en arrière)
+    - de quoi vider l'historique
 
-[ ] Système d'historique ( avec liste doublement chainée )
-[ ] Arbre ( pour faire un chatbot )
+2.
+[ ] Option pour changer le prefix
+[ ] Arbre de réponse ( pour faire un chatbot )
 [ ] Les jeux pour jouer avec le bot
-[ ] Faire le Système de chatbot
+[ ] Stockage des infos par utilisateur
+
+NOTE :
+Problème :
+Si plusieurs personne discute avec le bot
+
+
+

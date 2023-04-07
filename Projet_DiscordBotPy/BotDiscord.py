@@ -60,7 +60,7 @@ async def commande(ctx):
 
     return
 
-@bot.command(name="ChatBot")
+@bot.command(name="chatbot")
 async def chatbot(ctx):
     Historique.append("ChatBot")
     await ctx.response.send_message("ChatBot **On**")
@@ -68,8 +68,18 @@ async def chatbot(ctx):
         return m.author == ctx.author and m.channel == ctx.channel
     
     msg = await client.wait_for('message', check=check)
+    print(msg.content)
+    if msg.content == "Hello" :
+        await ctx.response.send_message("Hello")
+        msg = await client.wait_for('message', check=check)
+    elif msg.content == "How are you ?":
+        await ctx.response.send_message("I'm fine, and you ?")
+        msg = await client.wait_for('message', check=check)
+        if msg.content == "I'm fine too":
+            await ctx.response.send_message("Nice !")
+            msg = await client.wait_for('message', check=check)
     await ctx.response.send_message(msg.content)
-    
+
 
     return
 ## To Do
@@ -92,7 +102,7 @@ async def chifoumi(ctx):
     await ctx.response.send_message("Chifoumi choisit")
     return
 
-# Client Event
+# Client Event  
     
 
 
