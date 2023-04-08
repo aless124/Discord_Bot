@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from discord import app_commands
 from discord.ext import commands
 import time
+import asyncio
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -29,45 +30,50 @@ async def on_ready():
     print(f'{client.user} had connected to Discord!')
 
 
-# Bot Commandx
-
+# Bot Commands
 
 @bot.command(name="delete")
+async def delete(ctx, nbr_msg: int):
+    nbr_msg += 1 # On ajoute 1 pour compter le message de la commande
+    if nbr_msg > 11:
+        await ctx.response.send_message("You can only purge 10 messages at a time.")
+        return
+    elif nbr_msg < 1:
+        await ctx.response.send_message("You need to purge at least one message.")
+        return
+    else:
+        await ctx.response.defer()
+        await asyncio.sleep(1) # Attente de 1 seconde pour permettre à Discord de s'adapter
+        await ctx.channel.purge(limit=nbr_msg)
+        await ctx.response.send_message("Deleted {nbr_msg} messages.")
 
-async def delete(ctx,nbr_msg : int):
-    
-    if nbr_msg>10:
-        await ctx.send("You can only purge 10 message")
-        return
-    elif nbr_msg<1:
-        await ctx.send("You can't purge less than one message")
-        return
-    
-    await ctx.channel.purge(limit = nbr_msg)
-    Historique.append("Delete")
+    Historique.InsertToEnd("delete")
 
 @bot.command(name="delete_historique")
 async def delete_historique(ctx):
-    global Historique
-    Historique = Liste.doublyLinkedList()
+    Historique.DeleteAll()
     await ctx.response.send_message("History deleted")
+    return
+@bot.command(name="delete_last")
+async def delete_last(ctx):
+    Historique.delete_at_end()
+    await ctx.response.send_message("Last command deleted from the History")
     return
 @bot.command(name="commande_liste")
 async def commande(ctx):
-    global Historique
     Commands = "**Help \n Hello \n Historique \n delete \n delete_historique \n hello_setup**"
     await ctx.response.send_message("Liste des commandes : \n " +Commands  + "\n prefix : **;**")
-    Historique.append("commande_liste")
-
-    return
+    Historique.InsertToEnd("commande_liste")
+    return  
 
 @bot.command(name="chatbot")
 async def chatbot(ctx):
-    Historique.append("ChatBot")
+    Historique.InsertToEnd("chatbot")
     await ctx.response.send_message("ChatBot **On**")
+    print("ChatBot On")
     def check(m):     
-        return m.author == ctx.author and m.channel == ctx.channel
-    
+        return m.author.id == ctx.user.id and m.channel == ctx.channel
+        #return m.channel == ctx.channel
     msg = await client.wait_for('message', check=check)
     print(msg.content)
     if msg.content == "Hello" :
@@ -87,19 +93,19 @@ async def chatbot(ctx):
 
 @bot.command(name="plus_ou_moins")
 async def plus_ou_moins(ctx):
-    Historique.append("plus_ou_moins")
+    Historique.InsertToEnd("plus_ou_moins")
     await ctx.response.send_message("Plus ou moins choisit")
     return
 
 @bot.command(name="pendu")
 async def pendu(ctx):
-    Historique.append("pendu")
+    Historique.InsertToEnd("pendu")
     await ctx.response.send_message("Pendu choisit")
     return
 
 @bot.command(name="chifoumi")
 async def chifoumi(ctx):
-    Historique.append("chifoumi")
+    Historique.InsertToEnd("chifoumi")
     await ctx.response.send_message("Chifoumi choisit")
     return
 
@@ -117,7 +123,7 @@ async def on_member_join(member):
 @client.event
 async def on_message(message):
     global Historique
-    Commands = ["Help","Hello","Historique","delete","delete_historique","hello_setup"]
+    Commands = "**```Basic commands :```** \n  Help \n Hello \n hello_setup \n   **```Game```** \n plus_ou_moins \n pendu \n chifoumi  \n **```Extras```** \n Historique \n delete \n delete_historique \n commande_liste \n chatbot"
 
     if(message.content.startswith(prefix)):
         message.content = message.content[1:]
@@ -125,19 +131,18 @@ async def on_message(message):
         if message.author == client.user:
             return  
         elif(message.content == "help"):
-            Historique.append("Help")
+            Historique.InsertToEnd("Help")
             await message.channel.send(Commands)
 
         elif(message.content == "historique") :
-            Historique.append(message.content)
-            await message.channel.send(Historique)  
+            await message.channel.send(Historique.Display())  
         
         elif(message.content == "hello"):
             await message.channel.send("Bonjour ! Hi ! \n Enter ;Help for more information")
-            Historique.append("Hello")
+            Historique.InsertToEnd("hello")
         elif(message.content == "hello_setup"):
 
-            Historique.append(message.content)
+            Historique.InsertToEnd("hello_setup")
             await message.channel.send("Bonjour ! Hi ! \n Please choose a language \n ( French 1 , English 2 )")
             def check(m):     
                 if m.content == '1':

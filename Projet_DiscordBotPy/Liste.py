@@ -64,25 +64,30 @@ class doublyLinkedList:
     # Traversing and Displaying each element of the list
     def DeleteAll(self):       
         for _ in range(self.size_liste()-1):
-            self.size -= 1
+            #self.size -= 1
             if self.start_node is None:
                 print("The Linked list is empty, no element to delete")
-                return 
+                return "The Linked list is empty, no element to delete"
             if self.start_node.next is None:
                 self.start_node = None
             
             self.start_node = self.start_node.next
             self.start_prev = None
-
+        return self
     def Display(self):
         if self.start_node is None:
             print("The list is empty")
             return
         else:
+            Liste = []
             n = self.start_node
             while n is not None:
                 print("Element is: ", n.item)
+                Liste.append(n.item)
                 n = n.next
+        return Liste
+
+
         print("\n")
     # Size of the list
 
@@ -91,7 +96,7 @@ class doublyLinkedList:
         return self.size
 
 
-
+'''
 # Create a new Doubly Linked List
 NewDoublyLinkedList = doublyLinkedList()
 # Insert the element to empty list
@@ -117,5 +122,5 @@ print("*"*50)
 NewDoublyLinkedList.DeleteAll()
 NewDoublyLinkedList.Display()
 NewDoublyLinkedList.size_liste()
-
+'''
 
