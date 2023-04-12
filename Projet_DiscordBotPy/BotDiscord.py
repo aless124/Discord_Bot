@@ -20,6 +20,7 @@ client = discord.Client(intents=intents)
 bot = app_commands.CommandTree(client)
 
 Historique = Liste.doublyLinkedList()
+global prefix
 prefix = ";"
 
 # Client Event
@@ -45,6 +46,7 @@ async def delete(ctx, nbr_msg: int):
         await ctx.response.defer()
         await asyncio.sleep(1) # Attente de 1 seconde pour permettre à Discord de s'adapter
         await ctx.channel.purge(limit=nbr_msg)
+        print(ctx)
         await ctx.response.send_message("Deleted {nbr_msg} messages.")
 
     Historique.InsertToEnd("delete")
@@ -123,7 +125,8 @@ async def on_member_join(member):
 @client.event
 async def on_message(message):
     global Historique
-    Commands = "**```Basic commands :```** \n  Help \n Hello \n hello_setup \n   **```Game```** \n plus_ou_moins \n pendu \n chifoumi  \n **```Extras```** \n Historique \n delete \n delete_historique \n commande_liste \n chatbot"
+    global prefix
+    Commands = "**```Basic commands :```** \n Help \n Hello \n setup \n   **```Game```** \n plus_ou_moins \n pendu \n chifoumi  \n **```Extras```** \n Historique \n delete \n delete_historique \n commande_liste \n chatbot"
 
     if(message.content.startswith(prefix)):
         message.content = message.content[1:]
@@ -140,9 +143,9 @@ async def on_message(message):
         elif(message.content == "hello"):
             await message.channel.send("Bonjour ! Hi ! \n Enter ;Help for more information")
             Historique.InsertToEnd("hello")
-        elif(message.content == "hello_setup"):
+        elif(message.content == "setup"):
 
-            Historique.InsertToEnd("hello_setup")
+            Historique.InsertToEnd("setup")
             await message.channel.send("Bonjour ! Hi ! \n Please choose a language \n ( French 1 , English 2 )")
             def check(m):     
                 if m.content == '1':
@@ -164,6 +167,23 @@ async def on_message(message):
                 Language = "language set to English ( default) due to wrong input"
                 await message.channel.send(f'{msg.author}! {Language} choosen !')
                 Language = "English"    
+
+            await message.channel.send("Please choose a prefix \n ( default : ; ) \n Actual prefix : " + prefix )
+            def check(m):
+                
+                return m.author.id == message.author.id and m.channel == message.channel
+            msg = await client.wait_for('message', check=check)
+            
+            while len(msg.content) == 1 and msg.content.isalnum():
+                await message.channel.send("Le caractère entré est une lettre ou un chiffre. Vous ne pouvez choisir qu'un charactère special \n exemple : !, #, $, %, &, /, (, ), =, +, -, *, @, etc.")
+                msg = await client.wait_for('message', check=check)
+                time.sleep(1)
+
+                
+            prefix = msg.content
+            await message.channel.send(f'Prefix set to {prefix}')
+            await message.channel.send(f'Language set to {Language}')
+
 
     #await client.process_commands(message)
 
