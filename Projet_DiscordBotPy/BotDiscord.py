@@ -70,24 +70,33 @@ async def commande(ctx):
 
 @bot.command(name="chatbot")
 async def chatbot(ctx):
-    Historique.InsertToEnd("chatbot")
-    await ctx.response.send_message("ChatBot **On**")
-    print("ChatBot On")
     def check(m):     
         return m.author.id == ctx.user.id and m.channel == ctx.channel
-        #return m.channel == ctx.channel
+    Historique.InsertToEnd("chatbot")
+    print("ChatBot On")
+    await ctx.send("ChatBot **On**")
     msg = await client.wait_for('message', check=check)
-    print(msg.content)
+
     if msg.content == "Hello" :
-        await ctx.response.send_message("Hello")
+        await ctx.send("Hello ,  1. How are you ? 2. What's up ?")
         msg = await client.wait_for('message', check=check)
-    elif msg.content == "How are you ?":
-        await ctx.response.send_message("I'm fine, and you ?")
-        msg = await client.wait_for('message', check=check)
-        if msg.content == "I'm fine too":
-            await ctx.response.send_message("Nice !")
+
+        if msg.content == "How are you ?":
+            await ctx.send("I'm fine, and you ?   1. I'm fine too 2. I'm not fine")
             msg = await client.wait_for('message', check=check)
-    await ctx.response.send_message(msg.content)
+
+            if msg.content == "I'm fine too": 
+                await ctx.response.send_message("Nice !")
+                msg = await client.wait_for('message', check=check)
+
+        elif msg.content == "What's up ?":
+            await ctx.response.send_message("Nothing much, and you ?   1. Nothing much 2. I'm not fine")
+            msg = await client.wait_for('message', check=check)
+
+            if msg.content == "Nothing much": 
+                await ctx.response.send_message("ok...")
+                msg.response.send_message("Chatbot **Off**")
+    #await ctx.response.send_message(msg.content)
 
 
     return
