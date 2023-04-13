@@ -7,6 +7,7 @@ from discord import app_commands
 from discord.ext import commands
 import time
 import asyncio
+from random import randint
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -46,7 +47,6 @@ async def delete(ctx, nbr_msg: int):
         await ctx.response.defer()
         await asyncio.sleep(1) # Attente de 1 seconde pour permettre à Discord de s'adapter
         await ctx.channel.purge(limit=nbr_msg)
-        print(ctx)
         await ctx.response.send_message("Deleted {nbr_msg} messages.")
 
     Historique.InsertToEnd("delete")
@@ -64,7 +64,7 @@ async def delete_last(ctx):
 @bot.command(name="commande_liste")
 async def commande(ctx):
     Commands = "**Help \n Hello \n Historique \n delete \n delete_historique \n hello_setup**"
-    await ctx.response.send_message("Liste des commandes : \n " +Commands  + "\n prefix : **;**")
+    await ctx.response.send_message("Liste des commandes : \n " +Commands  + "\n **prefix :** ;")
     Historique.InsertToEnd("commande_liste")
     return  
 
@@ -74,28 +74,41 @@ async def chatbot(ctx):
         return m.author.id == ctx.user.id and m.channel == ctx.channel
     Historique.InsertToEnd("chatbot")
     print("ChatBot On")
-    await ctx.send("ChatBot **On**")
+    await ctx.channel.send("ChatBot **On**")
     msg = await client.wait_for('message', check=check)
 
     if msg.content == "Hello" :
-        await ctx.send("Hello ,  1. How are you ? 2. What's up ?")
+        await ctx.channel.send("Hello ,  1. How are you ? 2. What's up ?")
         msg = await client.wait_for('message', check=check)
+        msg.content.lower()
 
-        if msg.content == "How are you ?":
-            await ctx.send("I'm fine, and you ?   1. I'm fine too 2. I'm not fine")
+        if msg.content ==  "1" or msg.content.startswith("How"):
+            await ctx.channel.send("I'm fine, and you ?   1. I'm fine too 2. I'm not fine")
             msg = await client.wait_for('message', check=check)
+            msg.content.lower()
 
-            if msg.content == "I'm fine too": 
-                await ctx.response.send_message("Nice !")
+            if msg.content == "1" or msg.content.startswith("I'm fi"): 
+                await ctx.channel.send("Nice !")
+                msg = await client.wait_for('message', check=check)
+                msg.content.lower()
+
+            elif msg.content == "2" or msg.content.startswith("I'm not fi"):
+                await ctx.channel.send("Oh...")
+                msg = await client.wait_for('message', check=check)
+                msg.content.lower()
+
+        elif msg.content ==  "2" or msg.content.startswith("What"):
+            await ctx.channel.send("Nothing much, and you ?   1. Nothing much 2. I need something !")
+            msg = await client.wait_for('message', check=check)
+            msg.content.lower()
+            if msg.content == "1" or msg.content.startswith("Nothing"): 
+                await ctx.channel.send("ok...")
+                ctx.channel.send("Chatbot **Off**")
+
+            elif msg.content == "2" or msg.content.startswith("I need"):
+                await ctx.channel.send("What do you need ?")
                 msg = await client.wait_for('message', check=check)
 
-        elif msg.content == "What's up ?":
-            await ctx.response.send_message("Nothing much, and you ?   1. Nothing much 2. I'm not fine")
-            msg = await client.wait_for('message', check=check)
-
-            if msg.content == "Nothing much": 
-                await ctx.response.send_message("ok...")
-                msg.response.send_message("Chatbot **Off**")
     #await ctx.response.send_message(msg.content)
 
 
@@ -104,14 +117,34 @@ async def chatbot(ctx):
 
 @bot.command(name="plus_ou_moins")
 async def plus_ou_moins(ctx):
+    def check(m):     
+        return m.author.id == ctx.user.id and m.channel == ctx.channel
+    
+    await ctx.channel.send("Plus ou moins choisit")
+    x = randint(1, 100)
+    coup = 0    
+    n = 0
+    await ctx.channel.send("Devinez le nombre entre 1 et 100")
+    while x != n:
+        n = await client.wait_for('message', check=check)
+        print(n.content)
+        n = int(n.content)
+        coup += 1
+        if n < x:
+            await ctx.channel.send("plus")
+        elif n > x:
+            await ctx.channel.send("moins")
+        else:
+            await ctx.channel.send("Bravo, vous avez trouvé en " + str(coup) + " coups")
+        
     Historique.InsertToEnd("plus_ou_moins")
-    await ctx.response.send_message("Plus ou moins choisit")
     return
 
 @bot.command(name="pendu")
 async def pendu(ctx):
     Historique.InsertToEnd("pendu")
     await ctx.response.send_message("Pendu choisit")
+    
     return
 
 @bot.command(name="chifoumi")
@@ -179,8 +212,8 @@ async def on_message(message):
 
             await message.channel.send("Please choose a prefix \n ( default : ; ) \n Actual prefix : " + prefix )
             def check(m):
-                
                 return m.author.id == message.author.id and m.channel == message.channel
+            
             msg = await client.wait_for('message', check=check)
             
             while len(msg.content) == 1 and msg.content.isalnum():
