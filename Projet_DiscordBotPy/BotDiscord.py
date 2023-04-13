@@ -1,5 +1,6 @@
 
 import Liste
+import User
 import discord
 import os
 from dotenv import load_dotenv
@@ -166,10 +167,7 @@ async def chatbot(ctx):
             elif msg.content == "2" or msg.content.startswith("I need"):
                 await ctx.channel.send("What do you need ?")
                 msg = await client.wait_for('message', check=check)
-
     #await ctx.response.send_message(msg.content)
-
-
     return
 ## To Do
 
