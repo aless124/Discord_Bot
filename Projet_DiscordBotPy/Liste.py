@@ -74,6 +74,7 @@ class doublyLinkedList:
             self.start_node = self.start_node.next
             self.start_prev = None
         return self
+    
     def Display(self):
         if self.start_node is None:
             print("The list is empty")
@@ -86,6 +87,7 @@ class doublyLinkedList:
                 Liste.append(n.item)
                 n = n.next
         return Liste
+    
     def DisplayLast(self):
         if self.start_node is None:
             print("The list is empty")
