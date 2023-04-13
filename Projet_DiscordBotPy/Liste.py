@@ -86,9 +86,19 @@ class doublyLinkedList:
                 Liste.append(n.item)
                 n = n.next
         return Liste
+    def DisplayLast(self):
+        if self.start_node is None:
+            print("The list is empty")
+            return
+        else:
+            Liste = []
+            n = self.start_node
+            while n is not None:
+                print("Element is: ", n.item)
+                Liste.append(n.item)
+                n = n.next
+        return Liste[-1]
 
-
-        print("\n")
     # Size of the list
 
     def size_liste(self):
