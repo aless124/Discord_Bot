@@ -51,24 +51,31 @@ async def delete(ctx, nbr_msg: int):
 
     Historique.InsertToEnd("delete")
 
-@bot.command(name="delete_historique")
+@bot.command(name="delete_historique",description="Delete the history of the bot")
 async def delete_historique(ctx):
     Historique.DeleteAll()
     await ctx.response.send_message("History deleted")
     return
-@bot.command(name="delete_last")
+
+@bot.command(name="last_command",description="Display the last command")
+async def last_command(ctx):
+    await ctx.response.send_message("Last command : " + Historique.DisplayLast())
+    Historique.InsertToEnd("last_command")
+    return
+
+@bot.command(name="delete_last",description="Delete the last command")
 async def delete_last(ctx):
     Historique.delete_at_end()
     await ctx.response.send_message("Last command deleted from the History")
     return
-@bot.command(name="commande_liste")
+@bot.command(name="commande_liste",description="Liste des commandes")
 async def commande(ctx):
     Commands = "**Help \n Hello \n Historique \n delete \n delete_historique \n hello_setup**"
     await ctx.response.send_message("Liste des commandes : \n " +Commands  + "\n **prefix :** ;")
     Historique.InsertToEnd("commande_liste")
     return  
 
-@bot.command(name="chatbot")
+@bot.command(name="chatbot",description="activate the ChatBot mod")
 async def chatbot(ctx):
     def check(m):     
         return m.author.id == ctx.user.id and m.channel == ctx.channel
@@ -115,7 +122,7 @@ async def chatbot(ctx):
     return
 ## To Do
 
-@bot.command(name="plus_ou_moins")
+@bot.command(name="plus_ou_moins",description="Plus ou moins")
 async def plus_ou_moins(ctx):
     def check(m):     
         return m.author.id == ctx.user.id and m.channel == ctx.channel
