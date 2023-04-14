@@ -21,7 +21,7 @@ client = discord.Client(intents=intents)
 # Global Variable 
 bot = app_commands.CommandTree(client)
 Dictionnaire_User = {}
-Historique = Liste.doublyLinkedList()
+#Historique = Liste.doublyLinkedList()
 global prefix
 prefix = ";"
 
@@ -32,15 +32,11 @@ async def on_ready():
     await bot.sync()
     print(f'{client.user} had connected to Discord!')
 
-
-
 # Bot Commands
 
 @bot.command(name="delete")
 async def delete(ctx, nbr_msg: int):
     nbr_msg += 1 # On ajoute 1 pour compter le message de la commande
-    def check(m):
-        return m.author.id == ctx.author.id and m.channel == ctx.channel 
     if nbr_msg > 11:
         await ctx.followup.send("You can only purge 10 messages at a time.")
         return
@@ -51,14 +47,20 @@ async def delete(ctx, nbr_msg: int):
         await ctx.response.defer()
         await asyncio.sleep(1) # Attente de 1 seconde pour permettre à Discord de s'adapter
         await ctx.channel.purge(limit=nbr_msg)
-        await ctx.followup.send("Deleted {nbr_msg} messages.")
+        #await ctx.chan.send_message("Deleted {nbr_msg} messages.")
+    #Historique.InsertToEnd("delete")
+    if ctx.user.id not in Dictionnaire_User:
+        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+        print("User added to the dictionary")
+    Dictionnaire_User[ctx.user.id].InsertToEnd("delete")
 
-    Historique.InsertToEnd("delete")
 
-    Dictionnaire_User[ctx.message.author.id] = Historique.Display()
+
 @bot.command(name="setup",description="Setup the hello command")
 async def hello_setup(ctx):
-            Historique.InsertToEnd("setup")
+            if ctx.user.id not in Dictionnaire_User:
+                Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+            Dictionnaire_User[ctx.user.id].InsertToEnd("setup")
             await ctx.channel.send("Bonjour ! Hi ! \n Please choose a language \n ( French 1 , English 2 )")
             def check(m):     
                 if m.content == '1':
@@ -99,49 +101,74 @@ async def hello_setup(ctx):
 
 
 @bot.command(name="historique",description="Display the history of the bot")
-async def historique(ctx):
+async def historique(ctx):   
+
+    if ctx.user.id not in Dictionnaire_User.keys():
+        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+        Dictionnaire_User[ctx.user.id].InsertToEnd("historique")
+
+    list_command = Dictionnaire_User[ctx.user.id].Display()
+    for i in list_command:
+        await ctx.channel.send(i)
+
+'''
     print(Dictionnaire_User)
-    for cle, valeur in Dictionnaire_User.items():
-        a = "id user :" , cle , "Historique" , valeur
-        await ctx.channel.send(a)
-
-    if Historique.Display() == None:
-        await ctx.channel.send("The history is empty")
-        return
-    else: 
-        await ctx.channel.send(Historique.Display())  
-
-        return
+    if Dictionnaire_User == {}:
+        await ctx.channel.send("No history")
+    else:
+        for cle, valeur in Dictionnaire_User.items():
+            print("clé : ",cle)
+            print(ctx.user.id)
+          
+            a = "id user :" , cle , "Valeur :" , valeur.Display()
+            await ctx.channel.send(a)
+'''    
 
 @bot.command(name="delete_historique",description="Delete the history of the bot")
 async def delete_historique(ctx):
-    Historique.DeleteAll()
-    await ctx.response.send_message("History deleted")
+    await ctx.followup.send("History deleted")
+    if ctx.user.id not in Dictionnaire_User:
+        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+    Dictionnaire_User[ctx.user.id].DeleteAll()
+    
+
     return
 
 @bot.command(name="last_command",description="Display the last command")
 async def last_command(ctx):
-    await ctx.response.send_message("Last command : " + Historique.DisplayLast())
-    Historique.InsertToEnd("last_command")
+    await ctx.followup.send("Last command : " + Historique.DisplayLast())
+    if ctx.user.id not in Dictionnaire_User:
+        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+    Dictionnaire_User[ctx.user.id].InsertToEnd("last_command")
     return
 
 @bot.command(name="delete_last",description="Delete the last command")
 async def delete_last(ctx):
-    Historique.delete_at_end()
-    await ctx.response.send_message("Last command deleted from the History")
+
+    await ctx.ctx.followup.send("Last command deleted from the History")
+    if ctx.user.id not in Dictionnaire_User:
+        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+    Dictionnaire_User[ctx.user.id].delete_at_end()
+        
     return
 @bot.command(name="commande_liste",description="Liste des commandes")
 async def commande(ctx):
     Commands = "**Help \n Hello \n Historique \n delete \n delete_historique \n hello_setup**"
-    await ctx.response.send_message("Liste des commandes : \n " +Commands  + "\n **prefix :** ;")
-    Historique.InsertToEnd("commande_liste")
+    await ctx.followup.send("Liste des commandes : \n " +Commands  + "\n **prefix :** ;")
+    if ctx.user.id not in Dictionnaire_User:
+        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+    Dictionnaire_User[ctx.user.id].InsertToEnd("commande_liste")
+    
     return  
 
 @bot.command(name="chatbot",description="activate the ChatBot mod")
 async def chatbot(ctx):
     def check(m):     
         return m.author.id == ctx.user.id and m.channel == ctx.channel
-    Historique.InsertToEnd("chatbot")
+    if ctx.user.id not in Dictionnaire_User:
+        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+    Dictionnaire_User[ctx.user.id].InsertToEnd("chatbot")
+        
     print("ChatBot On")
     await ctx.channel.send("ChatBot **On**")
     msg = await client.wait_for('message', check=check)
@@ -177,7 +204,6 @@ async def chatbot(ctx):
             elif msg.content == "2" or msg.content.startswith("I need"):
                 await ctx.channel.send("What do you need ?")
                 msg = await client.wait_for('message', check=check)
-    #await ctx.response.send_message(msg.content)
     return
 ## To Do
 
@@ -203,21 +229,27 @@ async def plus_ou_moins(ctx):
         else:
             await ctx.channel.send("Bravo, vous avez trouvé en " + str(coup) + " coups")
         
-    Historique.InsertToEnd("plus_ou_moins")
-    Dictionnaire_User[n.author.id] = Historique.Display()
+    if ctx.user.id not in Dictionnaire_User:
+        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+    Dictionnaire_User[ctx.user.id].InsertToEnd("plus_ou_moins")
+
     return
 
 @bot.command(name="pendu")
 async def pendu(ctx):
-    Historique.InsertToEnd("pendu")
-    await ctx.response.send_message("Pendu choisit")
+    if ctx.user.id not in Dictionnaire_User:
+        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+    Dictionnaire_User[ctx.user.id].InsertToEnd("pendu")
+        
+    await ctx.followup.send("Pendu choisit")
     
     return
 
 @bot.command(name="chifoumi")
 async def chifoumi(ctx):
     Historique.InsertToEnd("chifoumi")
-    await ctx.response.send_message("Chifoumi choisit")
+    Dictionnaire_User[ctx.user.id] = Historique.DisplayLast()
+    await ctx.followup.send("Chifoumi choisit")
     return
 
 # Client Event  
@@ -243,14 +275,17 @@ async def on_message(message):
         if message.author == client.user:
             return  
         elif(message.content == "help"):
-            Historique.InsertToEnd("Help")
+            if message.author.id not in Dictionnaire_User:
+                Dictionnaire_User[message.author.id] = Liste.doublyLinkedList()
+            Dictionnaire_User[message.user.id].InsertToEnd("help")
+        
             await message.channel.send(Commands)
 
         elif(message.content == "hello"):
             await message.channel.send("Bonjour ! Hi ! \n Enter ;Help for more information")
-            Historique.InsertToEnd("hello")
 
-    #await client.process_commands(message)
+
+    
 
 
 client.run(TOKEN)
