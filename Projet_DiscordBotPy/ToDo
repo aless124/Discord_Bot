@@ -17,4 +17,12 @@ Problème :
 Si plusieurs personne discute avec le bot
 
 
+Dictionnaire 
+Clé : User
+Valeur : liste des messages
+
+Note for later :
+
+interaction.followup.send() should be used instead of send_message()
+
 

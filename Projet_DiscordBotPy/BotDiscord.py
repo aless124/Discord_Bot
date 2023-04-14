@@ -20,7 +20,7 @@ client = discord.Client(intents=intents)
 
 # Global Variable 
 bot = app_commands.CommandTree(client)
-
+Dictionnaire_User = {}
 Historique = Liste.doublyLinkedList()
 global prefix
 prefix = ";"
@@ -33,25 +33,29 @@ async def on_ready():
     print(f'{client.user} had connected to Discord!')
 
 
+
 # Bot Commands
 
 @bot.command(name="delete")
 async def delete(ctx, nbr_msg: int):
     nbr_msg += 1 # On ajoute 1 pour compter le message de la commande
+    def check(m):
+        return m.author.id == ctx.author.id and m.channel == ctx.channel 
     if nbr_msg > 11:
-        await ctx.response.send_message("You can only purge 10 messages at a time.")
+        await ctx.followup.send("You can only purge 10 messages at a time.")
         return
     elif nbr_msg < 1:
-        await ctx.response.send_message("You need to purge at least one message.")
+        await ctx.followup.send("You need to purge at least one message.")
         return
     else:
         await ctx.response.defer()
         await asyncio.sleep(1) # Attente de 1 seconde pour permettre à Discord de s'adapter
         await ctx.channel.purge(limit=nbr_msg)
-        await ctx.response.send_message("Deleted {nbr_msg} messages.")
+        await ctx.followup.send("Deleted {nbr_msg} messages.")
 
     Historique.InsertToEnd("delete")
 
+    Dictionnaire_User[ctx.message.author.id] = Historique.Display()
 @bot.command(name="setup",description="Setup the hello command")
 async def hello_setup(ctx):
             Historique.InsertToEnd("setup")
@@ -96,11 +100,17 @@ async def hello_setup(ctx):
 
 @bot.command(name="historique",description="Display the history of the bot")
 async def historique(ctx):
+    print(Dictionnaire_User)
+    for cle, valeur in Dictionnaire_User.items():
+        a = "id user :" , cle , "Historique" , valeur
+        await ctx.channel.send(a)
+
     if Historique.Display() == None:
         await ctx.channel.send("The history is empty")
         return
     else: 
         await ctx.channel.send(Historique.Display())  
+
         return
 
 @bot.command(name="delete_historique",description="Delete the history of the bot")
@@ -194,6 +204,7 @@ async def plus_ou_moins(ctx):
             await ctx.channel.send("Bravo, vous avez trouvé en " + str(coup) + " coups")
         
     Historique.InsertToEnd("plus_ou_moins")
+    Dictionnaire_User[n.author.id] = Historique.Display()
     return
 
 @bot.command(name="pendu")

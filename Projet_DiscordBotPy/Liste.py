@@ -5,10 +5,14 @@ class Node:
         self.next = None
         self.prev = None
 # Class for doubly Linked List
+
+
+
 class doublyLinkedList:
     def __init__(self):
         self.start_node = None
         self.size = 0
+        self.author = None
     
     # Insert Element to Empty list
     def InsertToEmptyList(self, data):
