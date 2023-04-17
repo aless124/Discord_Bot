@@ -1,6 +1,6 @@
-
+import datetime
+import time
 import Liste
-import User
 import discord
 import os
 from dotenv import load_dotenv
@@ -48,13 +48,19 @@ async def delete(ctx, nbr_msg: int):
         await asyncio.sleep(1) # Attente de 1 seconde pour permettre à Discord de s'adapter
         await ctx.channel.purge(limit=nbr_msg)
         #await ctx.chan.send_message("Deleted {nbr_msg} messages.")
-    #Historique.InsertToEnd("delete")
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
         print("User added to the dictionary")
     Dictionnaire_User[ctx.user.id].InsertToEnd("delete")
 
 
+@bot.command(name="heure")
+async def Heure(ctx):
+    await ctx.channel.send(f"il est {datetime.datetime.now().strftime('%H:%M:%S')}")
+    if ctx.user.id not in Dictionnaire_User.keys():
+        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+        print("User added to the dictionary")
+    Dictionnaire_User[ctx.user.id].InsertToEnd("Heure")
 
 @bot.command(name="setup",description="Setup the hello command")
 async def hello_setup(ctx):
@@ -89,8 +95,12 @@ async def hello_setup(ctx):
             
             msg = await client.wait_for('message', check=check)
             
-            while len(msg.content) == 1 and msg.content.isalnum():
+            while len(msg.content) == 1 and msg.content.isalnum() and Language == "Français":
                 await ctx.channel.send("Le caractère entré est une lettre ou un chiffre. Vous ne pouvez choisir qu'un charactère special \n exemple : !, #, $, %, &, /, (, ), =, +, -, *, @, etc.")
+                msg = await client.wait_for('message', check=check)
+                time.sleep(1)
+            while len(msg.content) == 1 and msg.content.isalnum() and Language == "English":
+                await ctx.channel.send("The character entered is a letter or a number. You can only choose a special character \n example : !, #, $, %, &, /, (, ), =, +, -, *, @, etc.")
                 msg = await client.wait_for('message', check=check)
                 time.sleep(1)
 
@@ -101,17 +111,24 @@ async def hello_setup(ctx):
 
 
 @bot.command(name="historique",description="Display the history of the bot")
-async def historique(ctx):   
+async def historique(ctx): 
     counter = 0
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
         Dictionnaire_User[ctx.user.id].InsertToEnd("historique")
-
     list_command = Dictionnaire_User[ctx.user.id].Display()
-    for i in list_command:
-        counter = counter + 1
-        i = str(counter)+". "+i
-        await ctx.channel.send(i)
+
+    if list_command == []:
+        await ctx.channel.send("No history")
+    else:
+
+        for i in list_command:
+            counter = counter + 1
+            i = str(counter)+". "+i
+            await ctx.channel.send(i)
+   
+
+
 
 '''
     print(Dictionnaire_User)
@@ -138,11 +155,35 @@ async def delete_historique(ctx):
 
 @bot.command(name="last_command",description="Display the last command")
 async def last_command(ctx):
-    await ctx.followup.send("Last command : " + Historique.DisplayLast())
+    Emoji1 = "⏪"  
+    Emoji2 = "⏩"
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+    if Dictionnaire_User[ctx.user.id].DisplayLast() == None:
+        await ctx.channel.send("No history")
+        return 
+    else:
+        msg = await ctx.channel.send("Last command : " + Dictionnaire_User[ctx.user.id].DisplayLast())
+    index = 0
+     # React to the message with the emoji
+    await msg.add_reaction(Emoji1)
+    await msg.add_reaction(Emoji2)
+    # Wait for the reaction
+    await ctx.response.defer()
+    reaction, user = await client.wait_for('reaction_add', check=lambda reaction, user: user == ctx.user and str(reaction.emoji) == Emoji1)
+    # If the reaction is the same as the emoji, display last command -1
+    if str(reaction.emoji) == Emoji1:
+        index = index - 1
+        await ctx.channel.send("Last command : " + Dictionnaire_User[ctx.user.id].DisplayOne(index))
+    
+    reaction,user = await client.wait_for('reaction_add', check=lambda reaction, user: user == ctx.user and str(reaction.emoji) == Emoji2)
+    # If the reaction is the same as the emoji, display last command +1
+    if str(reaction.emoji) == Emoji2:
+        index = index + 1
+        await ctx.channel.send("Last command : " + Dictionnaire_User[ctx.user.id].DisplayOne(index))
+    
     Dictionnaire_User[ctx.user.id].InsertToEnd("last_command")
-    return
+    return  
 
 @bot.command(name="delete_last",description="Delete the last command")
 async def delete_last(ctx):
@@ -242,16 +283,46 @@ async def pendu(ctx):
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
     Dictionnaire_User[ctx.user.id].InsertToEnd("pendu")
-        
     await ctx.followup.send("Pendu choisit")
+
     
     return
 
 @bot.command(name="chifoumi")
 async def chifoumi(ctx):
-    Historique.InsertToEnd("chifoumi")
-    Dictionnaire_User[ctx.user.id] = Historique.DisplayLast()
-    await ctx.followup.send("Chifoumi choisit")
+    if ctx.user.id not in Dictionnaire_User.keys():
+        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+    Dictionnaire_User[ctx.user.id].InsertToEnd("chifoumi")
+    await ctx.channel.send("Chifoumi choisit Pierre, Feuille ou Ciseaux ?")
+    int = randint(1, 3)
+    def check(m):     
+        return m.author.id == ctx.user.id and m.channel == ctx.channel
+    n = await client.wait_for('message', check=check)
+    if int == 1:
+        await ctx.channel.send("Pierre")
+
+    elif int == 2:
+        await ctx.channel.send("Feuille")
+    elif int == 3:
+        await ctx.channel.send("Ciseaux")
+    if n.content == "Pierre" and int == 2:
+        await ctx.channel.send("Vous avez perdu")
+    elif n.content == "Pierre" and int == 3:
+        await ctx.channel.send("Vous avez gagné")
+    elif n.content == "Feuille" and int == 1:
+        await ctx.channel.send("Vous avez gagné")
+    elif n.content == "Feuille" and int == 3:
+        await ctx.channel.send("Vous avez perdu")
+    elif n.content == "Ciseaux" and int == 1:
+        await ctx.channel.send("Vous avez perdu")
+    elif n.content == "Ciseaux" and int == 2:
+        await ctx.channel.send("Vous avez gagné")
+    elif n.content == "Pierre" and int == 1:
+        await ctx.channel.send("Egalité")
+    elif n.content == "Feuille" and int == 2:
+        await ctx.channel.send("Egalité")
+    elif n.content == "Ciseaux" and int == 3:
+        await ctx.channel.send("Egalité")
     return
 
 # Client Event  
@@ -267,8 +338,10 @@ async def on_member_join(member):
 
 @client.event
 async def on_message(message):
-    global Historique
     global prefix
+    time = datetime.datetime.today() # Le bot connait l'heure a chaque message
+
+
     Commands = "**```Basic commands :```** \n Help \n Hello \n setup \n   **```Game```** \n plus_ou_moins \n pendu \n chifoumi  \n **```Extras```** \n Historique \n delete \n delete_historique \n commande_liste \n chatbot"
 
     if(message.content.startswith(prefix)):
@@ -279,7 +352,7 @@ async def on_message(message):
         elif(message.content == "help"):
             if message.author.id not in Dictionnaire_User.keys():
                 Dictionnaire_User[message.author.id] = Liste.doublyLinkedList()
-            Dictionnaire_User[message.user.id].InsertToEnd("help")
+            Dictionnaire_User[message.author.id].InsertToEnd("help")
         
             await message.channel.send(Commands)
 

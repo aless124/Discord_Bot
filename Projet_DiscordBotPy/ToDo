@@ -7,11 +7,11 @@ Fonctionnalité du bot
     - de quoi vider l'historique
 
 2.
-[ ] Option pour changer le prefix
+[x] Option pour changer le prefix
 [ ] Arbre de réponse ( pour faire un chatbot )
-[ ] Les jeux pour jouer avec le bot
-[ ] Stockage des infos par utilisateur
-[ ] Ajout x
+[ ] Emoji pour voyager dans son historique
+[x] Les jeux pour jouer avec le bot
+[x] Stockage des infos par utilisateur
 NOTE :
 Problème :
 Si plusieurs personne discute avec le bot
@@ -25,4 +25,6 @@ Note for later :
 
 interaction.followup.send() should be used instead of send_message()
 
+Bug :
+When you use /last_command first it break the history
 

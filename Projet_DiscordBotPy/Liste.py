@@ -86,7 +86,6 @@ class doublyLinkedList:
             Liste = []
             n = self.start_node
             while n is not None:
-                print("Element is: ", n.item)
                 Liste.append(n.item)
                 n = n.next
         return Liste
@@ -99,10 +98,21 @@ class doublyLinkedList:
             Liste = []
             n = self.start_node
             while n is not None:
-                print("Element is: ", n.item)
                 Liste.append(n.item)
                 n = n.next
         return Liste[-1]
+    
+    def DisplayOne(self, index):
+        if self.start_node is None:
+            print("The list is empty")
+            return
+        else:
+            Liste = []
+            n = self.start_node
+            while n is not None:
+                Liste.append(n.item)
+                n = n.next
+        return Liste[index]
 
     # Size of the list
 
