@@ -37,8 +37,8 @@ class doublyLinkedList:
             n = n.next
         new_node = Node(data)
         self.size += 1
-        n.next = new_node
-        new_node.prev = n
+        n.next = new_node # type: ignore
+        new_node.prev = n # type: ignore
     # Delete the elements from the start
     def DeleteAtStart(self):
         self.size -= 1
@@ -63,19 +63,25 @@ class doublyLinkedList:
         n = self.start_node
         while n.next is not None:
             n = n.next
-        n.prev.next = None
+        n.prev = None
     # Traversing and Displaying each element of the list
     def DeleteAll(self):       
-        for _ in range(self.size_liste()-1):
+
+        if self.start_node is None:
+            print("The Linked list is empty, no element to delete")
+            return "The Linked list is empty, no element to delete"
+        else:
+            for _ in range(self.size_liste()-1):
             #self.size -= 1
-            if self.start_node is None:
-                print("The Linked list is empty, no element to delete")
-                return "The Linked list is empty, no element to delete"
-            if self.start_node.next is None:
-                self.start_node = None
+                if self.start_node == None:
+                    print("The Linked list is empty, no element to delete")
+                    return "The Linked list is empty, no element to delete"
+                elif self.start_node.next == None:
+                    self.start_node = None
             
-            self.start_node = self.start_node.next
-            self.start_prev = None
+                else :
+                    self.start_node = self.start_node.next
+                    self.start_prev = None
         return self
     
     def Display(self):

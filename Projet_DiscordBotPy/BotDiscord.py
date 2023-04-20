@@ -2,6 +2,7 @@ import datetime
 import time
 import Liste
 import Queue
+import Arbre
 import discord
 import os
 from dotenv import load_dotenv
@@ -30,7 +31,6 @@ prefix = ";"
 
 @client.event   
 async def on_ready():
-    await bot.sync()
     print(f'{client.user} had connected to Discord!')
 
 # Bot Commands
@@ -65,20 +65,12 @@ async def Heure(ctx):
 
 @bot.command(name="setup",description="Setup the hello command")
 async def hello_setup(ctx):
+            global prefix
             if ctx.user.id not in Dictionnaire_User.keys():
                 Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
             Dictionnaire_User[ctx.user.id].InsertToEnd("setup")
             await ctx.channel.send("Bonjour ! Hi ! \n Please choose a language \n ( French 1 , English 2 )")
-            def check(m):     
-                if m.content == '1':
-                    Language = "Français"
-                    
-                elif m.content == '2':
-                    Language = "English"
-                else :
-                    Language = "language set to English ( default) due to wrong input"
-                return Language
-            msg = await client.wait_for('message', check=check)
+            msg = await client.wait_for('message')
             if msg.content == '1':
                 Language = "Français"
                 await ctx.channel.send(f'Merci {msg.author}! {Language} choisi !')
@@ -117,18 +109,17 @@ async def historique(ctx):
     counter = 0
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
-        Dictionnaire_User[ctx.user.id].InsertToEnd("historique")
     list_command = Dictionnaire_User[ctx.user.id].Display()
 
-    if list_command == []:
-        await ctx.channel.send("No history")
+    if list_command == None:
+        await ctx.response.send_message("No history")
     else:
-
         for i in list_command:
             counter = counter + 1
             i = str(counter)+". "+i
             await ctx.channel.send(i)
-    await ctx.response.send_message("Historique affiché")
+        await ctx.response.send_message("Historique affiché")
+    Dictionnaire_User[ctx.user.id].InsertToEnd("historique")
    
 
 
@@ -148,7 +139,7 @@ async def historique(ctx):
 
 @bot.command(name="delete_historique",description="Delete the history of the bot")
 async def delete_historique(ctx):
-    await ctx.followup.send("History deleted")
+    await ctx.response.send_message("History deleted")
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
     Dictionnaire_User[ctx.user.id].DeleteAll()
@@ -199,20 +190,19 @@ async def last_command(ctx):
 @bot.command(name="delete_last",description="Delete the last command")
 async def delete_last(ctx):
 
-    await ctx.followup.send("Last command deleted from the History")
+    await ctx.response.send_message("Last command deleted from the History")
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
     Dictionnaire_User[ctx.user.id].delete_at_end()
-        
     return
+
 @bot.command(name="commande_liste",description="Liste des commandes")
 async def commande(ctx):
-    Commands = "**Help \n Hello \n Historique \n delete \n delete_historique \n hello_setup**"
+    Commands = "**Help \n Hello \n Historique \n delete \n delete_historique \n hello_setup \n **"
     await ctx.followup.send("Liste des commandes : \n " +Commands  + "\n **prefix :** ;")
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
     Dictionnaire_User[ctx.user.id].InsertToEnd("commande_liste")
-    
     return  
 
 @bot.command(name="chatbot",description="activate the ChatBot mod")
@@ -260,13 +250,19 @@ async def chatbot(ctx):
                 msg = await client.wait_for('message', check=check)
     return
 ## To Do
+@bot.command(name="chatbotv2",description="")
+async def chatbotv2(ctx):
+    
+    return  
+
+
 
 @bot.command(name="plus_ou_moins",description="Plus ou moins")
 async def plus_ou_moins(ctx):
     def check(m):     
         return m.author.id == ctx.user.id and m.channel == ctx.channel
     
-    await ctx.channel.send("Plus ou moins choisit")
+    await ctx.response.send_message("Plus ou moins choisit")
     x = randint(1, 100)
     coup = 0    
     n = 0
@@ -360,12 +356,7 @@ async def on_message(message):
         message.content = message.content.lower()
         if message.author == client.user:
             return  
-        elif(message.content == "help"):
-            if message.author.id not in Dictionnaire_User.keys():
-                Dictionnaire_User[message.author.id] = Liste.doublyLinkedList()
-            Dictionnaire_User[message.author.id].InsertToEnd("help")
-        
-            await message.channel.send(Commands)
+
 
         elif(message.content == "hello"):
             await message.channel.send("Bonjour ! Hi ! \n Enter ;Help for more information")
@@ -374,4 +365,4 @@ async def on_message(message):
     
 
 
-client.run(TOKEN)
+client.run(TOKEN)  # type: ignore
