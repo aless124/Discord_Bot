@@ -69,7 +69,7 @@ async def hello_setup(ctx):
             if ctx.user.id not in Dictionnaire_User.keys():
                 Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
             Dictionnaire_User[ctx.user.id].InsertToEnd("setup")
-            await ctx.channel.send("Bonjour ! Hi ! \n Please choose a language \n ( French 1 , English 2 )")
+            await ctx.response.send_message("Bonjour ! Hi ! \n Please choose a language \n ( French 1 , English 2 )")
             msg = await client.wait_for('message')
             if msg.content == '1':
                 Language = "Français"
@@ -84,7 +84,7 @@ async def hello_setup(ctx):
 
             await ctx.channel.send("Please choose a prefix \n ( default : ; ) \n Actual prefix : " + prefix )
             def check(m):
-                return m.author.id == ctx.author.id and m.channel == ctx.channel
+                return m.author.id == ctx.user.id and m.channel == ctx.channel
             
             msg = await client.wait_for('message', check=check)
             
@@ -198,8 +198,8 @@ async def delete_last(ctx):
 
 @bot.command(name="commande_liste",description="Liste des commandes")
 async def commande(ctx):
-    Commands = "**Help \n Hello \n Historique \n delete \n delete_historique \n hello_setup \n **"
-    await ctx.followup.send("Liste des commandes : \n " +Commands  + "\n **prefix :** ;")
+    Commands = "**```Basic commands :```** \n Help \n Hello \n setup \n   **```Game```** \n plus_ou_moins \n pendu \n chifoumi  \n **```Extras```** \n Historique \n delete \n delete_historique \n commande_liste \n chatbot"
+    await ctx.response.send_message("Liste des commandes : \n " +Commands  + "\n \n \n prefix : **;**")
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
     Dictionnaire_User[ctx.user.id].InsertToEnd("commande_liste")
@@ -291,16 +291,34 @@ async def pendu(ctx):
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
     Dictionnaire_User[ctx.user.id].InsertToEnd("pendu")
     await ctx.followup.send("Pendu choisit")
+    mot = "test"
+    mot = list(mot)
+    mot2 = []
+    for i in range(len(mot)):
+        mot2.append("_")
+    mot2 = list(mot2)
+    print(mot2)
+    print(mot)
+    def check(m):
+        return m.author.id == ctx.user.id and m.channel == ctx.channel
+    while mot != mot2:
+        n = await client.wait_for('message', check=check)
+        n = n.content
+        n = list(n)
+        for i in range(len(mot)):
+            if mot[i] == n[0]:
+                mot2[i] = n[0]
+        print(mot2)
+        await ctx.channel.send(mot2)
+    await ctx.channel.send("Bravo")
 
-    
-    return
 
 @bot.command(name="chifoumi")
 async def chifoumi(ctx):
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
     Dictionnaire_User[ctx.user.id].InsertToEnd("chifoumi")
-    await ctx.channel.send("Chifoumi choisit Pierre, Feuille ou Ciseaux ?")
+    await ctx.response.send_message("Chifoumi choisit Pierre, Feuille ou Ciseaux ?")
     int = randint(1, 3)
     def check(m):     
         return m.author.id == ctx.user.id and m.channel == ctx.channel

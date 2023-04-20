@@ -56,14 +56,14 @@ class doublyLinkedList:
         # Check if the List is empty
         if self.start_node is None:
             print("The Linked list is empty, no element to delete")
-            return 
-        if self.start_node.next is None:
-            self.start_node = None
-            return
-        n = self.start_node
-        while n.next is not None:
-            n = n.next
-        n.prev = None
+            return ("The Linked list is empty, no element to delete")
+        else:
+            n = self.start_node
+            while n.next is not None:
+                n = n.next
+            n.prev.next = None
+    # Delete the elements from the end
+        
     # Traversing and Displaying each element of the list
     def DeleteAll(self):       
 
