@@ -1,6 +1,7 @@
 import datetime
 import time
 import Liste
+import Queue
 import discord
 import os
 from dotenv import load_dotenv
@@ -112,6 +113,7 @@ async def hello_setup(ctx):
 
 @bot.command(name="historique",description="Display the history of the bot")
 async def historique(ctx): 
+    
     counter = 0
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
@@ -126,6 +128,7 @@ async def historique(ctx):
             counter = counter + 1
             i = str(counter)+". "+i
             await ctx.channel.send(i)
+    await ctx.response.send_message("Historique affiché")
    
 
 
@@ -157,6 +160,7 @@ async def delete_historique(ctx):
 async def last_command(ctx):
     Emoji1 = "⏪"  
     Emoji2 = "⏩"
+    Emoji3 = "❌"
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
     if Dictionnaire_User[ctx.user.id].DisplayLast() == None:
@@ -168,27 +172,34 @@ async def last_command(ctx):
      # React to the message with the emoji
     await msg.add_reaction(Emoji1)
     await msg.add_reaction(Emoji2)
+    await msg.add_reaction(Emoji3)
     # Wait for the reaction
     await ctx.response.defer()
-    reaction, user = await client.wait_for('reaction_add', check=lambda reaction, user: user == ctx.user and str(reaction.emoji) == Emoji1)
-    # If the reaction is the same as the emoji, display last command -1
-    if str(reaction.emoji) == Emoji1:
-        index = index - 1
-        await ctx.channel.send("Last command : " + Dictionnaire_User[ctx.user.id].DisplayOne(index))
+
+    while True:
+        reaction, user = await client.wait_for('reaction_add', check=lambda reaction, user: user == ctx.user and str(reaction.emoji) == Emoji1)
+        # If the reaction is the same as the emoji, display last command -1
     
-    reaction,user = await client.wait_for('reaction_add', check=lambda reaction, user: user == ctx.user and str(reaction.emoji) == Emoji2)
+        if str(reaction.emoji) == Emoji1:
+            await ctx.channel.send("Last command : " + Dictionnaire_User[ctx.user.id].DisplayOne(index))
+            index = index - 1
+    
+        reaction,user = await client.wait_for('reaction_add', check=lambda reaction, user: user == ctx.user and str(reaction.emoji) == Emoji2)
     # If the reaction is the same as the emoji, display last command +1
-    if str(reaction.emoji) == Emoji2:
-        index = index + 1
-        await ctx.channel.send("Last command : " + Dictionnaire_User[ctx.user.id].DisplayOne(index))
-    
+        if str(reaction.emoji) == Emoji2:
+            await ctx.channel.send("Last command : " + Dictionnaire_User[ctx.user.id].DisplayOne(index))
+            index = index + 1
+        if str(reaction.emoji) == Emoji3:
+            await ctx.channel.send("End of History")
+            break
+        
     Dictionnaire_User[ctx.user.id].InsertToEnd("last_command")
     return  
 
 @bot.command(name="delete_last",description="Delete the last command")
 async def delete_last(ctx):
 
-    await ctx.ctx.followup.send("Last command deleted from the History")
+    await ctx.followup.send("Last command deleted from the History")
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
     Dictionnaire_User[ctx.user.id].delete_at_end()

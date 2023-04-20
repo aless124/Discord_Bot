@@ -51,7 +51,7 @@ class Node:
 '''       Liste chainé + trié       '''
 
 class list_chained_sorted:
-    def __init__(self) -> None:
+    def __init__(self,data) -> None:
         self.first_node = Node(data)
 
     def append(self,data):
@@ -98,4 +98,3 @@ class Stack:
         return self.list.tri()
     def peek(self):
         return self.list.first_node.data
-    
