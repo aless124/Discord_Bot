@@ -14,7 +14,7 @@ from random import randint
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-
+ID = os.getenv('DISCORD_ID')
 intents = discord.Intents.default()
 intents = intents.all()
 client = discord.Client(intents=intents)
@@ -26,12 +26,14 @@ Dictionnaire_User = {}
 #Historique = Liste.doublyLinkedList()
 global prefix
 prefix = ";"
-
+SaveArbre = Arbre.T
 # Client Event
 
 @client.event   
 async def on_ready():
     print(f'{client.user} had connected to Discord!')
+    # print all runnning commands that are running
+
 
 # Bot Commands
 
@@ -57,7 +59,7 @@ async def delete(ctx, nbr_msg: int):
 
 @bot.command(name="heure")
 async def Heure(ctx):
-    await ctx.channel.send(f"il est {datetime.datetime.now().strftime('%H:%M:%S')}")
+    await ctx.response.send_message(f"il est {datetime.datetime.now().strftime('%H:%M:%S')}")
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
         print("User added to the dictionary")
@@ -105,7 +107,6 @@ async def hello_setup(ctx):
 
 @bot.command(name="historique",description="Display the history of the bot")
 async def historique(ctx): 
-    
     counter = 0
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
@@ -121,7 +122,6 @@ async def historique(ctx):
         await ctx.response.send_message("Historique affiché")
     Dictionnaire_User[ctx.user.id].InsertToEnd("historique")
    
-
 
 
 '''
@@ -155,17 +155,15 @@ async def last_command(ctx):
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
     if Dictionnaire_User[ctx.user.id].DisplayLast() == None:
-        await ctx.channel.send("No history")
-        return 
+        await ctx.response.send_message("No history")
     else:
         msg = await ctx.channel.send("Last command : " + Dictionnaire_User[ctx.user.id].DisplayLast())
-    index = 0
      # React to the message with the emoji
-    await msg.add_reaction(Emoji1)
-    await msg.add_reaction(Emoji2)
-    await msg.add_reaction(Emoji3)
+        await msg.add_reaction(Emoji1)
+        await msg.add_reaction(Emoji2)
+        await msg.add_reaction(Emoji3)
     # Wait for the reaction
-    await ctx.response.defer()
+    index = 0
 
     while True:
         reaction, user = await client.wait_for('reaction_add', check=lambda reaction, user: user == ctx.user and str(reaction.emoji) == Emoji1)
@@ -204,7 +202,7 @@ async def commande(ctx):
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
     Dictionnaire_User[ctx.user.id].InsertToEnd("commande_liste")
     return  
-
+'''
 @bot.command(name="chatbot",description="activate the ChatBot mod")
 async def chatbot(ctx):
     def check(m):     
@@ -249,11 +247,43 @@ async def chatbot(ctx):
                 await ctx.channel.send("What do you need ?")
                 msg = await client.wait_for('message', check=check)
     return
-## To Do
-@bot.command(name="chatbotv2",description="")
-async def chatbotv2(ctx):
+'''
+@bot.command(name='sync', description='Owner only')
+async def sync(interaction: discord.Interaction):
+    if interaction.user.id == int(ID): # type: ignore
+        await bot.sync()
+        print('Command tree synced.')
+        await interaction.response.send_message('Command tree synced.')
+    else:
+        await interaction.response.send_message('You must be the owner to use this command!')
+@bot.command(name="chatbot",description="blabla")
+async def chatbot(ctx):
+    over = False
+    print(SaveArbre)
+    Arbre.T = SaveArbre
+    if ctx.user.id not in Dictionnaire_User.keys():
+        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+
+    Dictionnaire_User[ctx.user.id].InsertToEnd("chatbot")
     
-    return  
+    await ctx.response.send_message(Arbre.T.get_question())
+
+    def check(m):     
+        return m.author.id == ctx.user.id and m.channel == ctx.channel
+    msg = await client.wait_for('message', check=check)
+    question_suivante = Arbre.T.send_answer(msg.content)
+
+    print(question_suivante)
+    while len(Arbre.T.current_node.reponses) > 0 and over == False:
+        await ctx.followup.send(question_suivante)
+        msg = await client.wait_for('message', check=check)
+        question_suivante = Arbre.T.send_answer(msg.content)
+        
+        if question_suivante == "Chatbot **Off**":
+            over = True
+            await ctx.followup.send("Chatbot **Off**")
+
+    print("over")
 
 
 
@@ -323,6 +353,7 @@ async def chifoumi(ctx):
     def check(m):     
         return m.author.id == ctx.user.id and m.channel == ctx.channel
     n = await client.wait_for('message', check=check)
+    n.content =     n.content.lower()
     if int == 1:
         await ctx.channel.send("Pierre")
 
@@ -330,23 +361,23 @@ async def chifoumi(ctx):
         await ctx.channel.send("Feuille")
     elif int == 3:
         await ctx.channel.send("Ciseaux")
-    if n.content == "Pierre" and int == 2:
+    if n.content == "pierre" and int == 2:
         await ctx.channel.send("Vous avez perdu")
-    elif n.content == "Pierre" and int == 3:
+    elif n.content == "pierre" and int == 3:
         await ctx.channel.send("Vous avez gagné")
-    elif n.content == "Feuille" and int == 1:
+    elif n.content == "feuille" and int == 1:
         await ctx.channel.send("Vous avez gagné")
-    elif n.content == "Feuille" and int == 3:
+    elif n.content == "feuille" and int == 3:
         await ctx.channel.send("Vous avez perdu")
-    elif n.content == "Ciseaux" and int == 1:
+    elif n.content == "ciseaux" and int == 1:
         await ctx.channel.send("Vous avez perdu")
-    elif n.content == "Ciseaux" and int == 2:
+    elif n.content == "ciseaux" and int == 2:
         await ctx.channel.send("Vous avez gagné")
-    elif n.content == "Pierre" and int == 1:
+    elif n.content == "pierre" and int == 1:
         await ctx.channel.send("Egalité")
-    elif n.content == "Feuille" and int == 2:
+    elif n.content == "feuille" and int == 2:
         await ctx.channel.send("Egalité")
-    elif n.content == "Ciseaux" and int == 3:
+    elif n.content == "ciseaux" and int == 3:
         await ctx.channel.send("Egalité")
     return
 

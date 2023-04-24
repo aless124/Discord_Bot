@@ -42,4 +42,22 @@ class tree :
         break
     
     return self.current_node.question
+  
+ 
 
+T = tree("Voulez vous parlez de Python?")
+T.append_question("Choisissez un thème :  POO, language informatique, Python",["Oui"],"Voulez vous parlez de Python?")
+T.append_question("OK. over",["Non"],"Voulez vous parlez de Python?")
+# Noeud 2  réponse Oui
+T.append_question("La programmation orientée objet (ou POO en abrégé) correspond à une autre manière d'imaginer, de construire et d'organiser son code. La programmation orientée objet repose sur le concept d'objets qui sont des entités qui vont pouvoir posséder un ensemble de variables et de fonctions qui leur sont propres. over",["POO"],"Choisissez un thème :  POO, language informatique, Python")
+T.append_question("Un langage informatique est un langage formel non nécessairement Turing-complet utilisé lors de la conception, la mise en œuvre, ou l'exploitation d un système d'information. over",["language informatique"],"Choisissez un thème :  POO, language informatique, Python")
+T.append_question("Python est un genre de serpents de la famille des Pythonidae.Ce sont des serpents constricteurs ovipares. La taille des pythons peut varier de 50 cm à 10 m. over ",["python"],"Choisissez un thème :  POO, language informatique, Python")
+# Noeud 3 réponse POO
+T.append_question("Chatbot **Off**",["over"],"La programmation orientée objet (ou POO en abrégé) correspond à une autre manière d'imaginer, de construire et d'organiser son code. La programmation orientée objet repose sur le concept d'objets qui sont des entités qui vont pouvoir posséder un ensemble de variables et de fonctions qui leur sont propres. over")
+
+
+#print(T.get_question())
+
+#question_suivante = T.send_answer("Oui")
+
+#print("question suivante : ",question_suivante)
