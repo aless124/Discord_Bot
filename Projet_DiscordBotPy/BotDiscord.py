@@ -1,8 +1,10 @@
+#region import
+
 import datetime
 import time
-import Liste
-import Queue
-import Arbre
+import classe.Liste as Liste
+import classe.Queue as Queue
+import classe.Arbre as Arbre
 import discord
 import os
 from dotenv import load_dotenv
@@ -11,7 +13,12 @@ from discord.ext import commands
 import time
 import asyncio
 from random import randint
+import json
 
+#endregion
+
+
+#region variable
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 ID = os.getenv('DISCORD_ID')
@@ -23,20 +30,72 @@ client = discord.Client(intents=intents)
 # Global Variable 
 bot = app_commands.CommandTree(client)
 Dictionnaire_User = {}
-#Historique = Liste.doublyLinkedList()
+FILENAME = "Projet_DiscordBotPy\json\data.json"
 global prefix
 prefix = ";"
 SaveArbre = Arbre.T
-# Client Event
-
-@client.event   
-async def on_ready():
-    print(f'{client.user} had connected to Discord!')
-    # print all runnning commands that are running
 
 
+#endregion
+
+#region Json
+
+# Ouvrir le fichier JSON et charger son contenu
+
+# Fonction pour sauvegarder les données dans le fichier JSON
+def save_data(data):
+    with open(FILENAME, "w") as f:
+        json.dump(data, f)
+
+# Fonction pour charger les données depuis le fichier JSON
+def load_data():
+    try:
+        with open(FILENAME, "r") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        # Si le fichier n'existe pas encore, renvoyer un dictionnaire vide
+        print("Le fichier n'existe pas encore.")
+        return {}
+
+
+## test
+# Enregistrer des données
+'''
+my_data = {"users": ["Alice", "Bob", "Charlie","test"]}
+save_data(my_data)
+# Charger des données
+loaded_data = load_data()
+print(loaded_data)  # {'users': ['Alice', 'Bob', 'Charlie']}
+'''
+#endregion
+
+
+
+
+#region app command
 # Bot Commands
 
+@bot.command(name="savedata",description="Save the data in the json file")
+async def savedata(ctx):
+    await ctx.response.send_message("Saving data...")
+    print(Dictionnaire_User[ctx.user.id].Display())
+    Data = {ctx.user.id : Dictionnaire_User[ctx.user.id].Display()}
+    save_data(Data)
+    await ctx.channel.send("Data saved !")
+
+@bot.command(name="loaddata",description="Load the data from the json file")
+async def loaddata(ctx):
+    await ctx.response.send_message("Loading data...")
+    Data = load_data()
+    print(Data)
+    if ctx.user.id not in Dictionnaire_User.keys():
+        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+    for i in Data[ctx.user.id]:
+        Dictionnaire_User[ctx.user.id].InsertToEnd(i)
+
+    await ctx.channel.send("Data loaded !")
+
+    
 @bot.command(name="delete")
 async def delete(ctx, nbr_msg: int):
     nbr_msg += 1 # On ajoute 1 pour compter le message de la commande
@@ -124,18 +183,6 @@ async def historique(ctx):
    
 
 
-'''
-    print(Dictionnaire_User)
-    if Dictionnaire_User == {}:
-        await ctx.channel.send("No history")
-    else:
-        for cle, valeur in Dictionnaire_User.items():
-            print("clé : ",cle)
-            print(ctx.user.id)
-          
-            a = "id user :" , cle , "Valeur :" , valeur.Display()
-            await ctx.channel.send(a)
-'''    
 
 @bot.command(name="delete_historique",description="Delete the history of the bot")
 async def delete_historique(ctx):
@@ -259,13 +306,11 @@ async def sync(interaction: discord.Interaction):
 @bot.command(name="chatbot",description="blabla")
 async def chatbot(ctx):
     over = False
-    print(SaveArbre)
-    Arbre.T = SaveArbre
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
 
     Dictionnaire_User[ctx.user.id].InsertToEnd("chatbot")
-    
+    Arbre.T.first_question()        # return to the first question
     await ctx.response.send_message(Arbre.T.get_question())
 
     def check(m):     
@@ -285,7 +330,9 @@ async def chatbot(ctx):
 
     print("over")
 
+#endregion
 
+#region Jeux
 
 @bot.command(name="plus_ou_moins",description="Plus ou moins")
 async def plus_ou_moins(ctx):
@@ -381,8 +428,17 @@ async def chifoumi(ctx):
         await ctx.channel.send("Egalité")
     return
 
-# Client Event  
-    
+
+#endregion
+
+
+#region client event
+
+
+@client.event   
+async def on_ready():
+    print(f'{client.user} had connected to Discord!')
+    # print all runnning commands that are running
 
 
 @client.event
@@ -410,7 +466,7 @@ async def on_message(message):
         elif(message.content == "hello"):
             await message.channel.send("Bonjour ! Hi ! \n Enter ;Help for more information")
 
-
+#endregion
     
 
 

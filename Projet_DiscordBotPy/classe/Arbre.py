@@ -42,6 +42,9 @@ class tree :
         break
     
     return self.current_node.question
+  def first_question(self):
+    self.current_node = self.first_node
+    return self.current_node.question
   
  
 

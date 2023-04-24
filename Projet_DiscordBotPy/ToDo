@@ -8,23 +8,23 @@ Fonctionnalité du bot
 
 2.
 [x] Option pour changer le prefix
-[ ] Arbre binaire de réponse ( pour faire un chatbot )
+[x] Arbre binaire de réponse ( pour faire un chatbot )
 [ ] Emoji pour voyager dans son historique
 [x] Les jeux pour jouer avec le bot
 [x] Stockage des infos par utilisateur  
 [ ] Via une file, créer un systeme permettant de protéger l'intégrité de l'historique, pour cela il faudra trouver un moyen de limiter l'accès à l'historique pour qu'une seule personne à la fois ne puisse travailler dessus.
 [ ] Utiliser date pour faire calendrier - rappel 
-[ ]  Trouver une solution afin que lorsque que le bot s'arrête ses données stockées dans les différentes structures et collections crées précédement se soient pas perdues.
-
+[x]  Trouver une solution afin que lorsque que le bot s'arrête ses données stockées dans les différentes structures et collections crées précédement se soient pas perdues.
+[ ] Trouver moyen de faire tourner constamment le bot
 NOTE :
 Problème :
-Si plusieurs personne discute avec le bot
 Fix delete_at_end
+
+/!\ Fix delete_history = delete_at_end
 
 Note for later :
 
 interaction.followup.send() should be used instead of send_message()
 
-Bug :
-When you use /last_command first it break the history
+
 
