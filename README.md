@@ -57,6 +57,7 @@ Fonctionnalité du bot
 [ ] Utiliser date pour faire calendrier - rappel 
 [x]  Trouver une solution afin que lorsque que le bot s'arrête ses données stockées dans les différentes structures et collections crées précédement se soient pas perdues.
 [ ] Trouver moyen de faire tourner constamment le bot
+[ ] Connecter bot à une api
 NOTE :
 Problème :
 Fix delete_at_end
