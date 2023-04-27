@@ -26,13 +26,13 @@ Le bot Discord est capable de :
 Pour utiliser ce bot Discord, veuillez suivre les étapes suivantes :
 
 1. Clonez le dépôt GitHub sur votre ordinateur
-2. Installez les dépendances avec la commande `npm install`
-3. Créez un fichier `.env` à la racine du projet contenant votre token Discord
-4. Lancez le bot avec la commande `npm start`
+2. Créez un fichier `.env` à la racine du projet contenant votre token Discord
+3. Dans le fichier `.env` ajouter une variable et y ajouter le token du bot
+4. Lancez le script pour lancer le bot
 
 ## Chemin de l'arbre de réponse
 
-Le bot utilise un arbre binaire pour poser une série de questions prédéfinies à l'utilisateur afin de définir son besoin. Le sujet des questions est libre. Les commandes suivantes sont disponibles :
+Le bot utilise un arbre binaire pour poser une série de questions prédéfinies à l'utilisateur afin de définir son besoin. 
 
 
 ### Commandes le l'arbre :
