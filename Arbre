@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-04-27T10:20:45.552Z" agent="5.0 (Windows)" version="20.6.0" etag="IERvxUaQClXPR9NcHQCv" type="github">
+<mxfile host="app.diagrams.net" modified="2023-04-27T10:20:54.469Z" agent="5.0 (Windows)" version="20.6.0" etag="VgK1OlnefC0T9mElseKW" type="github">
   <diagram id="-8a_KAvsSr7BKT5Z0DeJ" name="Page-1">
     <mxGraphModel dx="865" dy="470" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -51,7 +51,7 @@
         <mxCell id="4AtZ0Tb11hLlwo05LJaD-10" value="But" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="450" y="280" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="4AtZ0Tb11hLlwo05LJaD-19" value="Oui" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="4AtZ0Tb11hLlwo05LJaD-19" value="Non" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="707" y="280" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="4AtZ0Tb11hLlwo05LJaD-20" value="Blague" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
