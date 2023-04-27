@@ -71,7 +71,7 @@ class doublyLinkedList:
             print("The Linked list is empty, no element to delete")
             return "The Linked list is empty, no element to delete"
         else:
-            for _ in range(self.size_liste()-1):
+            for _ in range(self.size_liste()):
             #self.size -= 1
                 if self.start_node == None:
                     print("The Linked list is empty, no element to delete")

@@ -87,10 +87,10 @@ async def savedata(ctx):
 async def loaddata(ctx):
     await ctx.response.send_message("Loading data...")
     Data = load_data()
-    print(Data)
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
-    for i in Data[ctx.user.id]:
+ 
+    for i in Data[str(ctx.user.id)]:
         Dictionnaire_User[ctx.user.id].InsertToEnd(i)
 
     await ctx.channel.send("Data loaded !")
@@ -179,7 +179,6 @@ async def historique(ctx):
             i = str(counter)+". "+i
             await ctx.channel.send(i)
         await ctx.response.send_message("Historique affiché")
-    Dictionnaire_User[ctx.user.id].InsertToEnd("historique")
    
 
 
@@ -232,7 +231,7 @@ async def last_command(ctx):
     Dictionnaire_User[ctx.user.id].InsertToEnd("last_command")
     return  
 
-@bot.command(name="delete_last",description="Delete the last command")
+@bot.command(name="delete_last",description="Delete the lasxt command")
 async def delete_last(ctx):
 
     await ctx.response.send_message("Last command deleted from the History")
@@ -367,18 +366,21 @@ async def pendu(ctx):
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
     Dictionnaire_User[ctx.user.id].InsertToEnd("pendu")
-    await ctx.followup.send("Pendu choisit")
+    await ctx.response.send_message("Pendu choisit")
+    await ctx.channel.send("Devinez le mot")
     mot = "test"
     mot = list(mot)
     mot2 = []
+    life = 9
     for i in range(len(mot)):
         mot2.append("_")
     mot2 = list(mot2)
+    await ctx.channel.send("il y a "+str(mot2)  + " lettres")
     print(mot2)
     print(mot)
     def check(m):
         return m.author.id == ctx.user.id and m.channel == ctx.channel
-    while mot != mot2:
+    while mot != mot2 or life != 0:
         n = await client.wait_for('message', check=check)
         n = n.content
         n = list(n)
@@ -387,6 +389,8 @@ async def pendu(ctx):
                 mot2[i] = n[0]
         print(mot2)
         await ctx.channel.send(mot2)
+        life -= 1
+        await ctx.channel.send("Il vous reste " + str(life) + " vies")
     await ctx.channel.send("Bravo")
 
 

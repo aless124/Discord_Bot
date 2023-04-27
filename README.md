@@ -72,6 +72,7 @@ Fonctionnalité du bot
 [ ] Trouver moyen de faire tourner constamment le bot
 
 [ ] Connecter bot à une api
+
 NOTE :
 Problème :
 Fix delete_at_end
