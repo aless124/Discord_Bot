@@ -39,7 +39,8 @@ Le bot utilise un arbre binaire pour poser une série de questions prédéfinies
 
 - `/chatbot` : lance la conversation avec le bot
 - "reset" : permet de recommencer la discussion , doit être écris quand le bot est en mode "chatbot"
-- `/speakabout` : permet de savoir si un sujet est traité par le bot ou non
+- `/speakabout` : permet de savoir si un sujet est traité par le bot ou non ( le système fonctionne par mot clé )
+- Sujet actuelement écris : Python , Ecla 
 
 ## Fonctionnalité Bonus
 
