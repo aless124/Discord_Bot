@@ -8,6 +8,7 @@ Ce projet consiste à créer un bot Discord doté de plusieurs fonctionnalités 
 - [Chemin de l'arbre de réponse](#chemin-de-larbre-de-réponse)
 - [Fonctionnalité Bonus](#fonctionnalité-bonus)
 - [Auteur](#auteur)
+- [Commandes](#commandes)
 - [ToDo](#todo)
 
 ## Fonctionnalité de base
@@ -44,6 +45,10 @@ Le bot dispose également d'un système de protection de l'historique via une fi
 ## Auteur
 
 Ce projet a été créé par [Votre Nom].
+
+## Commandes
+
+
 
 ## ToDo
 
