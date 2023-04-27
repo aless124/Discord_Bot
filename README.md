@@ -34,9 +34,12 @@ Pour utiliser ce bot Discord, veuillez suivre les étapes suivantes :
 
 Le bot utilise un arbre binaire pour poser une série de questions prédéfinies à l'utilisateur afin de définir son besoin. Le sujet des questions est libre. Les commandes suivantes sont disponibles :
 
-- `!help` : lance la conversation avec le bot
-- `!reset` : permet de recommencer la discussion
-- `!speak about X` : permet de savoir si un sujet est traité par le bot ou non
+
+### Commandes le l'arbre :
+
+- `/chatbot` : lance la conversation avec le bot
+- "reset" : permet de recommencer la discussion , doit être écris quand le bot est en mode "chatbot"
+- `/speakabout` : permet de savoir si un sujet est traité par le bot ou non
 
 ## Fonctionnalité Bonus
 
@@ -44,7 +47,7 @@ Le bot dispose également d'un système de protection de l'historique via une fi
 
 ## Auteur
 
-Ce projet a été créé par [Votre Nom].
+Ce projet a été créé par Alessandro FARAJALLAH.
 
 ## Commandes
 
