@@ -3,7 +3,7 @@ Le projet ainsi que le readme ne sont pas du tout terminés.
 # Projet de bot Discord pour l'école
 
 ![Bot Discord](/image/ppdiscord%20-%20Copie.PNG)
-
+![Image Arbre](/image/Arbre.PNG)
 Ce projet est un bot Discord développé en Python pour un projet d'école. Le bot dispose de plusieurs fonctionnalités, dont :
 
 - Système d'historique avec une liste doublement chainée
