@@ -1,6 +1,6 @@
 #region import
 
-import datetime
+from datetime import datetime, timedelta
 import time
 import classe.Liste as Liste
 import classe.Queue as Queue
@@ -78,9 +78,39 @@ print(loaded_data)  # {'users': ['Alice', 'Bob', 'Charlie']}
 @bot.command(name="savedata",description="Save the data in the json file")
 async def savedata(ctx):
     await ctx.response.send_message("Saving data...")
-    print(Dictionnaire_User[ctx.user.id].Display())
+    if ctx.user.id not in Dictionnaire_User.keys():
+        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
     Data = {ctx.user.id : Dictionnaire_User[ctx.user.id].Display()}
     save_data(Data)
+    await ctx.channel.send("Data saved !")
+
+@bot.command(name="savedataauto",description="save data during a certain time")
+async def save_data_auto(ctx,hour_of_ending:int,day_of_ending:int):
+    Hour = datetime.now().strftime('%H')
+    Jour = datetime.now().strftime('%d')
+    Jour = int(Jour)
+
+    await ctx.response.send_message("Saving data")
+
+    while day_of_ending != Jour :
+        if ctx.user.id not in Dictionnaire_User.keys():
+            Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+            print("User added to the dictionary")
+
+        Data = {ctx.user.id : Dictionnaire_User[ctx.user.id].Display()}
+        save_data(Data)
+        await asyncio.sleep(10)
+        
+    if day_of_ending == Jour:
+        while int(Hour) != int(hour_of_ending): 
+            if ctx.user.id not in Dictionnaire_User.keys():
+                Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+                print("User added to the dictionary")
+
+            Data = {ctx.user.id : Dictionnaire_User[ctx.user.id].Display()}
+            save_data(Data)
+            await asyncio.sleep(10)
+
     await ctx.channel.send("Data saved !")
 
 @bot.command(name="loaddata",description="Load the data from the json file")
@@ -118,7 +148,7 @@ async def delete(ctx, nbr_msg: int):
 
 @bot.command(name="heure")
 async def Heure(ctx):
-    await ctx.response.send_message(f"il est {datetime.datetime.now().strftime('%H:%M:%S')}")
+    await ctx.response.send_message(f"il est {datetime.now().strftime('%H:%M:%S')}")
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
         print("User added to the dictionary")
@@ -231,7 +261,7 @@ async def last_command(ctx):
     Dictionnaire_User[ctx.user.id].InsertToEnd("last_command")
     return  
 
-@bot.command(name="delete_last",description="Delete the lasxt command")
+@bot.command(name="delete_last",description="Delete the last command")
 async def delete_last(ctx):
 
     await ctx.response.send_message("Last command deleted from the History")
@@ -242,7 +272,7 @@ async def delete_last(ctx):
 
 @bot.command(name="commande_liste",description="Liste des commandes")
 async def commande(ctx):
-    Commands = "**```Basic commands :```** \n Help \n Hello \n setup \n   **```Game```** \n plus_ou_moins \n pendu \n chifoumi  \n **```Extras```** \n Historique \n delete \n delete_historique \n commande_liste \n chatbot"
+    Commands = "**```Basic commands :```** \n Help \n Hello \n setup \n   **```Game```** \n plus_ou_moins \n pendu \n chifoumi  \n **```Extras```** \n Historique \n delete  ( delete X previous msg )\n delete_historique \n commande_liste \n chatbot \n"
     await ctx.response.send_message("Liste des commandes : \n " +Commands  + "\n \n \n prefix : **;**")
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
@@ -296,12 +326,25 @@ async def chatbot(ctx):
 '''
 @bot.command(name='sync', description='Owner only')
 async def sync(interaction: discord.Interaction):
+
     if interaction.user.id == int(ID): # type: ignore
         await bot.sync()
         print('Command tree synced.')
         await interaction.response.send_message('Command tree synced.')
     else:
         await interaction.response.send_message('You must be the owner to use this command!')
+
+@bot.command(name="speakabout",description="speack about X")
+async def speakabout(ctx,sujet:str):
+    Arbre.T.first_question()        # return to the first question
+    py = "python"
+    
+    if py in Arbre.T.send_answer(sujet).lower():   
+        await ctx.response.send_message("Le bot connait ce sujet")
+    else:
+        await ctx.response.send_message("Le bot ne connait pas ce sujet")
+
+
 @bot.command(name="chatbot",description="blabla")
 async def chatbot(ctx):
     over = False
@@ -316,13 +359,16 @@ async def chatbot(ctx):
         return m.author.id == ctx.user.id and m.channel == ctx.channel
     msg = await client.wait_for('message', check=check)
     question_suivante = Arbre.T.send_answer(msg.content)
-
-    print(question_suivante)
-    while len(Arbre.T.current_node.reponses) > 0 and over == False:
+    while over == False:
         await ctx.followup.send(question_suivante)
         msg = await client.wait_for('message', check=check)
         question_suivante = Arbre.T.send_answer(msg.content)
         
+        if msg.content == "reset" :
+            await ctx.channel.send("ChatBot reset")
+            await ctx.channel.send(Arbre.T.first_question())
+            question_suivante = Arbre.T.send_answer(msg.content)
+
         if question_suivante == "Chatbot **Off**":
             over = True
             await ctx.followup.send("Chatbot **Off**")
@@ -455,7 +501,7 @@ async def on_member_join(member):
 @client.event
 async def on_message(message):
     global prefix
-    time = datetime.datetime.today() # Le bot connait l'heure a chaque message
+    time = datetime.today() # Le bot connait l'heure a chaque message
 
 
     Commands = "**```Basic commands :```** \n Help \n Hello \n setup \n   **```Game```** \n plus_ou_moins \n pendu \n chifoumi  \n **```Extras```** \n Historique \n delete \n delete_historique \n commande_liste \n chatbot"

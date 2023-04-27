@@ -73,10 +73,17 @@ Fonctionnalité du bot
 
 [ ] Connecter bot à une api
 
+[ ] Partenariat entre Ecla et Aless Junior  
+Ecla is a programming language that is designed to be easy to learn and use. It is a general purpose language that can be used for many different things.
+Ecla est un projet de création de langage interprété en golang, une vraie boite à outils (fonctionnalités avancées accessible depuis les standards librairie), facile d’utilisation et éducatif
+
 NOTE :
 Problème :
 Fix delete_at_end
 
+Question:
+Hashtable sur le user du json?
+Sauvegarder les données dans un fichier json continuellement?
 /!\ Fix delete_history = delete_at_end
 
 Note for later :
