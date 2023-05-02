@@ -59,3 +59,9 @@ Ce projet a été créé par Alessandro FARAJALLAH.
 - Stockage des données dans une hashtable liée à l'id du compte Discord de l'utilisateur
 - Mise en place d'une solution pour éviter la perte de données en cas d'arrêt du bot
 - Ajout de fonctionnalités supplémentaires pour améliorer le bot Discord.
+
+API
+
+- Communication avec l'api
+- Ajouter des mangas 
+- Supprimer des mangas

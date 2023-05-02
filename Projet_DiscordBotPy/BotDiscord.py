@@ -1,6 +1,9 @@
 #region import
 
 from datetime import datetime, timedelta
+from pymongo import MongoClient
+import pymongo
+import uuid
 import time
 import classe.Liste as Liste
 import classe.Queue as Queue
@@ -13,8 +16,8 @@ from discord.ext import commands
 import time
 import asyncio
 from random import randint
+import requests
 import json
-
 #endregion
 
 
@@ -22,6 +25,9 @@ import json
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 ID = os.getenv('DISCORD_ID')
+USERNAME = os.getenv('USERNAME')
+PASSWORD = os.getenv('PASSWORD')
+API_KEY = os.getenv('API_KEY')
 intents = discord.Intents.default()
 intents = intents.all()
 client = discord.Client(intents=intents)
@@ -34,7 +40,6 @@ FILENAME = "Projet_DiscordBotPy\json\data.json"
 global prefix
 prefix = ";"
 SaveArbre = Arbre.T
-
 
 #endregion
 
@@ -68,9 +73,6 @@ loaded_data = load_data()
 print(loaded_data)  # {'users': ['Alice', 'Bob', 'Charlie']}
 '''
 #endregion
-
-
-
 
 #region app command
 # Bot Commands
@@ -124,8 +126,7 @@ async def loaddata(ctx):
         Dictionnaire_User[ctx.user.id].InsertToEnd(i)
 
     await ctx.channel.send("Data loaded !")
-
-    
+   
 @bot.command(name="delete")
 async def delete(ctx, nbr_msg: int):
     nbr_msg += 1 # On ajoute 1 pour compter le message de la commande
@@ -145,7 +146,6 @@ async def delete(ctx, nbr_msg: int):
         print("User added to the dictionary")
     Dictionnaire_User[ctx.user.id].InsertToEnd("delete")
 
-
 @bot.command(name="heure")
 async def Heure(ctx):
     await ctx.response.send_message(f"il est {datetime.now().strftime('%H:%M:%S')}")
@@ -154,6 +154,13 @@ async def Heure(ctx):
         print("User added to the dictionary")
     Dictionnaire_User[ctx.user.id].InsertToEnd("Heure")
 
+@bot.command(name="mangaapi")
+async def MangaAPI(ctx):
+    await ctx.response.send_message("lien vers l'api : \n ```https://")
+    if ctx.user.id not in Dictionnaire_User.keys():
+        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+        print("User added to the dictionary")
+    Dictionnaire_User[ctx.user.id].InsertToEnd("MangaAPI")
 @bot.command(name="setup",description="Setup the hello command")
 async def hello_setup(ctx):
             global prefix
@@ -193,7 +200,6 @@ async def hello_setup(ctx):
             await ctx.channel.send(f'Prefix set to {prefix}')
             await ctx.channel.send(f'Language set to {Language}')
 
-
 @bot.command(name="historique",description="Display the history of the bot")
 async def historique(ctx): 
     counter = 0
@@ -210,9 +216,6 @@ async def historique(ctx):
             await ctx.channel.send(i)
         await ctx.response.send_message("Historique affiché")
    
-
-
-
 @bot.command(name="delete_historique",description="Delete the history of the bot")
 async def delete_historique(ctx):
     await ctx.response.send_message("History deleted")
@@ -220,7 +223,6 @@ async def delete_historique(ctx):
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
     Dictionnaire_User[ctx.user.id].DeleteAll()
     
-
     return
 
 @bot.command(name="last_command",description="Display the last command")
@@ -334,6 +336,57 @@ async def sync(interaction: discord.Interaction):
     else:
         await interaction.response.send_message('You must be the owner to use this command!')
 
+@bot.command(name="randommangas",description="ask for a manga")
+async def RandomMangas(ctx):
+    url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-xuytm/endpoint/data/v1/action/find"
+    headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Request-Headers': '*',
+        'api-key': API_KEY,
+    }
+
+    # Obtenir le nombre total de documents dans la collection
+    payload_count = json.dumps({
+        "collection": "final_exam",
+        "database": "final_exam",
+        "dataSource": "Cluster0",
+        "query": {},
+        "options": {
+            "limit": 0,
+            "skip": 0
+        },
+        "count": True
+    })
+
+    response_count = requests.request("POST", url, headers=headers, data=payload_count)
+    count = response_count.json()["count"]
+
+    # Générer un nombre aléatoire entre 0 et le nombre total de documents
+    random_index = randint(0, count - 1)
+
+    # Récupérer un document aléatoire à partir de l'index généré
+    payload_find = json.dumps({
+        "collection": "final_exam",
+        "database": "final_exam",
+        "dataSource": "Cluster0",
+        "query": {},
+        "options": {
+            "limit": 1,
+            "skip": random_index
+        }
+    })
+
+    response_find = requests.request("POST", url, headers=headers, data=payload_find)
+    print(test+response_find.json())
+    document = response_find.json()["document"][0]
+    titre = document["Titre"]
+    origine = document["Origine"]
+    genres = document["Genres"]
+
+    await ctx.response.send_message(f"Titre: {titre}\nOrigine: {origine}\nGenres: {genres}")
+
+
+        
 @bot.command(name="speakabout",description="speack about X")
 async def speakabout(ctx,sujet:str):
     Arbre.T.first_question()        # return to the first question
@@ -343,7 +396,6 @@ async def speakabout(ctx,sujet:str):
         await ctx.response.send_message("Le bot connait ce sujet")
     else:
         await ctx.response.send_message("Le bot ne connait pas ce sujet")
-
 
 @bot.command(name="chatbot",description="blabla")
 async def chatbot(ctx):
