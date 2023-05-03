@@ -30,12 +30,10 @@ Pour utiliser ce bot Discord, veuillez suivre les étapes suivantes :
 4. Lancez le script pour lancer le bot
 
 
-## Chemin de l'arbre de réponse
-
-Le bot utilise un arbre binaire pour poser une série de questions prédéfinies à l'utilisateur afin de définir son besoin. 
 
 
-![Image Arbre](./image/Arbre.PNG)
+
+## Commandes
 
 ### Commandes le l'arbre :
 
@@ -44,11 +42,16 @@ Le bot utilise un arbre binaire pour poser une série de questions prédéfinies
 - `/speakabout` : permet de savoir si un sujet est traité par le bot ou non ( le système fonctionne par mot clé )
 - Sujet actuelement écris : Python , Ecla 
 
+#### Chemin de l'arbre de réponse
+
+Le bot utilise un arbre binaire pour poser une série de questions prédéfinies à l'utilisateur afin de définir son besoin. 
 
 
-## Commandes de l'historique
+![Image Arbre](./image/Arbre.PNG)
 
-## Commandes pour la sauvegarde des données
+### Commandes de l'historique
+
+### Commandes pour la sauvegarde des données
 
 
 
