@@ -15,7 +15,7 @@ Ce projet consiste à créer un bot Discord doté de plusieurs fonctionnalités 
 
 
 - Stocker l'historique des commandes via une liste chaînée   [Working]
-- Via une file, créer un systeme permettant de protéger l'intégrité de l'historique,
+- Via une file, créer un systeme permettant de protéger l'intégrité de l'historique
 - Via un arbre binaire , créer un système de discution  [Working]
 - Via une hashtable, stocker soit l'historique
 - Sauvegarde des données du bot dans un Historique [Working]
@@ -28,6 +28,7 @@ Pour utiliser ce bot Discord, veuillez suivre les étapes suivantes :
 2. Créez un fichier `.env` à la racine du projet contenant votre token Discord
 3. Dans le fichier `.env` ajouter une variable et y ajouter le token du bot
 4. Lancez le script pour lancer le bot
+
 
 ## Chemin de l'arbre de réponse
 
