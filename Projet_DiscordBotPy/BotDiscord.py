@@ -154,13 +154,6 @@ async def Heure(ctx):
         print("User added to the dictionary")
     Dictionnaire_User[ctx.user.id].InsertToEnd("Heure")
 
-@bot.command(name="mangaapi")
-async def MangaAPI(ctx):
-    await ctx.response.send_message("lien vers l'api : \n ```https://")
-    if ctx.user.id not in Dictionnaire_User.keys():
-        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
-        print("User added to the dictionary")
-    Dictionnaire_User[ctx.user.id].InsertToEnd("MangaAPI")
 @bot.command(name="setup",description="Setup the hello command")
 async def hello_setup(ctx):
             global prefix
@@ -336,57 +329,77 @@ async def sync(interaction: discord.Interaction):
     else:
         await interaction.response.send_message('You must be the owner to use this command!')
 
+@bot.command(name="mangaapi")
+async def MangaAPI(ctx, titre:str):
+    url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-xuytm/endpoint/data/v1/action/findOne"
+
+    payload = json.dumps({
+        "collection": "final_exam",
+        "database": "final_exam",
+        "dataSource": "Cluster0",
+        
+        "filter": {
+            "Titre": titre
+        }
+
+    })
+    headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Request-Headers': '*',
+    'api-key': API_KEY, 
+    'Accept': 'application/ejson'
+    }
+
+    response_count = requests.request("POST", url, headers=headers, data=payload)
+    if ctx.user.id not in Dictionnaire_User.keys():
+        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+        print("User added to the dictionary")
+    Dictionnaire_User[ctx.user.id].InsertToEnd("MangaAPI")
+    try:
+        document = response_count.json()["document"]
+        titre = document["Titre"]
+        origine = document["Origine"]
+        genres = document["Genres"]
+        await ctx.response.send_message(f"Titre: {titre}\nOrigine: {origine}\nGenres: {genres}")
+    except:
+        await ctx.response.send_message(f'Manga {titre} not found')
+
 @bot.command(name="randommangas",description="ask for a manga")
 async def RandomMangas(ctx):
-    url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-xuytm/endpoint/data/v1/action/find"
+    import random
+    url = "https://eu-west-2.aws.data.mongodb-api.com/app/data-xuytm/endpoint/data/v1/action/findOne"
+    rand = randint(1970,2022)
+    
+    payload = json.dumps({
+            "collection": "final_exam",
+            "database": "final_exam",
+            "dataSource": "Cluster0",
+            "filter": {
+                "Date de sortie": rand
+            },  
+        })
     headers = {
         'Content-Type': 'application/json',
         'Access-Control-Request-Headers': '*',
-        'api-key': API_KEY,
+        'api-key': API_KEY, 
+        'Accept': 'application/ejson'
     }
 
-    # Obtenir le nombre total de documents dans la collection
-    payload_count = json.dumps({
-        "collection": "final_exam",
-        "database": "final_exam",
-        "dataSource": "Cluster0",
-        "query": {},
-        "options": {
-            "limit": 0,
-            "skip": 0
-        },
-        "count": True
-    })
+    response = requests.request("POST", url, headers=headers, data=payload)
 
-    response_count = requests.request("POST", url, headers=headers, data=payload_count)
-    count = response_count.json()["count"]
+    if ctx.user.id not in Dictionnaire_User.keys():
+        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+        print("User added to the dictionary")
+    Dictionnaire_User[ctx.user.id].InsertToEnd("MangaAPI")
+    try:
+        document = response.json()["document"]
+        titre = document["Titre"]
+        origine = document["Origine"]
+        genres = document["Genres"]
+        await ctx.response.send_message(f"Titre: {titre}\nOrigine: {origine}\nGenres: {genres}")
+    except:
+        await ctx.response.send_message(f'No Random Manga were found')
 
-    # Générer un nombre aléatoire entre 0 et le nombre total de documents
-    random_index = randint(0, count - 1)
-
-    # Récupérer un document aléatoire à partir de l'index généré
-    payload_find = json.dumps({
-        "collection": "final_exam",
-        "database": "final_exam",
-        "dataSource": "Cluster0",
-        "query": {},
-        "options": {
-            "limit": 1,
-            "skip": random_index
-        }
-    })
-
-    response_find = requests.request("POST", url, headers=headers, data=payload_find)
-    print(test+response_find.json())
-    document = response_find.json()["document"][0]
-    titre = document["Titre"]
-    origine = document["Origine"]
-    genres = document["Genres"]
-
-    await ctx.response.send_message(f"Titre: {titre}\nOrigine: {origine}\nGenres: {genres}")
-
-
-        
 @bot.command(name="speakabout",description="speack about X")
 async def speakabout(ctx,sujet:str):
     Arbre.T.first_question()        # return to the first question
