@@ -35,7 +35,7 @@ Pour utiliser ce bot Discord, veuillez suivre les étapes suivantes :
 Le bot utilise un arbre binaire pour poser une série de questions prédéfinies à l'utilisateur afin de définir son besoin. 
 
 
-https://github.com/aless124/Discord_Bot/blob/main/image/Arbre.PNG?raw=true
+![Image Arbre](./image/Arbre.PNG)
 
 ### Commandes le l'arbre :
 
