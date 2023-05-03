@@ -13,13 +13,12 @@ Ce projet consiste à créer un bot Discord doté de plusieurs fonctionnalités 
 
 ## Fonctionnalité de base
 
-Le bot Discord est capable de :
 
 - Stocker l'historique des commandes via une liste chaînée   [Working]
-- Afficher la dernière commande rentrée  [Working]
-- Afficher toutes les commandes rentrées par un utilisateur depuis sa première connexion  [Working]
-- Se déplacer dans l'historique (en avant et en arrière)
-- Vider l'historique  [Working]
+- Via une file, créer un systeme permettant de protéger l'intégrité de l'historique,
+- Via un arbre binaire , créer un système de discution  [Working]
+- Via une hashtable, stocker soit l'historique
+- Sauvegarde des données du bot dans un Historique [Working]
 
 ## Installation
 
