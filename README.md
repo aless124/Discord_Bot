@@ -44,15 +44,11 @@ Le bot utilise un arbre binaire pour poser une série de questions prédéfinies
 - `/speakabout` : permet de savoir si un sujet est traité par le bot ou non ( le système fonctionne par mot clé )
 - Sujet actuelement écris : Python , Ecla 
 
-## Fonctionnalité Bonus
 
-Communication avec une API d'une bdd de mangas
 
-## Auteur
+## Commandes de l'historique
 
-Ce projet a été créé par Alessandro FARAJALLAH.
-
-## Commandes
+## Commandes pour la sauvegarde des données
 
 
 
@@ -67,3 +63,11 @@ API
 - Communication avec l'api
 - Ajouter des mangas 
 - Supprimer des mangas
+
+## Fonctionnalité Bonus
+
+Communication avec une API d'une bdd de mangas
+
+## Auteur
+
+Ce projet a été créé par Alessandro FARAJALLAH.
