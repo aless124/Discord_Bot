@@ -46,7 +46,7 @@ Le bot utilise un arbre binaire pour poser une série de questions prédéfinies
 
 ## Fonctionnalité Bonus
 
-
+Communication avec une API d'une bdd de mangas
 
 ## Auteur
 
