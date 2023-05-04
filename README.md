@@ -69,7 +69,7 @@ API
 
 ## Fonctionnalité Bonus
 
-Communication avec une API d'une bdd de mangas
+Communication avec une API d'une base de données de mangas/manwha
 
 ## Auteur
 
