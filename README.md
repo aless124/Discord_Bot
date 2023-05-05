@@ -30,9 +30,6 @@ Pour utiliser ce bot Discord, veuillez suivre les étapes suivantes :
 4. Lancez le script pour lancer le bot
 
 
-
-
-
 ## Commandes
 
 ### Commandes le l'arbre :
@@ -54,13 +51,6 @@ Le bot utilise un arbre binaire pour poser une série de questions prédéfinies
 ### Commandes pour la sauvegarde des données
 
 
-
-## ToDo
-- Le bot dispose également d'un système de protection de l'historique via une file. Pour éviter que plusieurs personnes travaillent sur l'historique simultanément, l'accès à l'historique est limité à une seule personne à la fois.
-- Stockage des données dans une hashtable liée à l'id du compte Discord de l'utilisateur
-- Mise en place d'une solution pour éviter la perte de données en cas d'arrêt du bot
-- Ajout de fonctionnalités supplémentaires pour améliorer le bot Discord.
-
 API
 
 - Communication avec l'api
@@ -71,6 +61,15 @@ API
 
 Communication avec une API d'une base de données de mangas/manwha
 
+
+## ToDo
+- Le bot dispose également d'un système de protection de l'historique via une file. Pour éviter que plusieurs personnes travaillent sur l'historique simultanément, l'accès à l'historique est limité à une seule personne à la fois.
+- Stockage des données dans une hashtable liée à l'id du compte Discord de l'utilisateur
+- Mise en place d'une solution pour éviter la perte de données en cas d'arrêt du bot
+- Ajout de fonctionnalités supplémentaires pour améliorer le bot Discord.
+
+
 ## Auteur
 
 Ce projet a été créé par Alessandro FARAJALLAH.
+
