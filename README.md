@@ -62,6 +62,8 @@ API
 ### Commande de l'API
 Communication avec une API d'une base de données de mangas/manwha
 
+/randommangas
+
 ## ToDo
 - Le bot dispose également d'un système de protection de l'historique via une file. Pour éviter que plusieurs personnes travaillent sur l'historique simultanément, l'accès à l'historique est limité à une seule personne à la fois.
 - Stockage des données dans une hashtable liée à l'id du compte Discord de l'utilisateur
