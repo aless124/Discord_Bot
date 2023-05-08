@@ -73,5 +73,5 @@ Communication avec une API d'une base de données de mangas/manwha
 
 ## Auteur
 
-Ce projet a été créé par Alessandro FARAJALLAH.
+Ce projet a été créé et d&veloppé par Alessandro FARAJALLAH.
 
