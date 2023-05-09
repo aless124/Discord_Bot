@@ -59,8 +59,12 @@ API
 
 ## Fonctionnalité Bonus
 
+### Jeu
+
+
 ### Commande de l'API
 Communication avec une API d'une base de données de mangas/manwha
+
 
 /randommangas
 
