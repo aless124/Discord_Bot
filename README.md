@@ -97,6 +97,7 @@ Le bot utilise un arbre binaire pour poser une série de questions prédéfinies
 Communication avec une API d'une base de données de mangas/manwha
 
 /randommangas   - Pour avoir un mangas/manwha aléatoire
+
 /mangaapi       - Pour avoir des informations sur un mangas spécifié 
 
 ### Only Admin
