@@ -50,14 +50,19 @@ Le bot utilise un arbre binaire pour poser une série de questions prédéfinies
 
 ### Commandes pour la sauvegarde des données
 
+/savedata  Permet de sauvegardé les data des users ( leurs historiques ) dans un fichier JSON
 
-API
+/loaddata Permet de charger les données depuis le fichier JSON
 
-- Communication avec l'api
-- Ajouter des mangas 
-- Supprimer des mangas
 
 ## Fonctionnalité Bonus
+
+/heure  ( affiche l'heure actuelle )
+
+### Data
+
+/savedataauto  Permet de sauvegardé les données jusqu'à avoir atteint la data spécifié
+
 
 ### Jeu
 
@@ -71,9 +76,8 @@ API
 ### Commande de l'API
 Communication avec une API d'une base de données de mangas/manwha
 
-
-/randommangas
-/mangaapi
+/randommangas   - Pour avoir un mangas/manwha aléatoire
+/mangaapi       - Pour avoir des informations sur un mangas spécifié 
 
 ### Only Admin
 
