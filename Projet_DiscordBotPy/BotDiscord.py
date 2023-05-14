@@ -221,6 +221,17 @@ async def delete_historique(ctx):
     
     return
 
+@bot.command(name="last_command2",description="Display the last command")
+async def last_command2(ctx):
+    if ctx.user.id not in Dictionnaire_User.keys():
+        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+    if Dictionnaire_User[ctx.user.id].DisplayLast() == None:
+        await ctx.response.send_message("No history")
+    else:
+        await ctx.response.send_message("Last command : " + Dictionnaire_User[ctx.user.id].DisplayLast())
+    Dictionnaire_User[ctx.user.id].InsertToEnd("last_command")
+    return
+
 @bot.command(name="last_command",description="Display the last command")
 async def last_command(ctx):
     Emoji1 = "⏪"  
@@ -260,7 +271,7 @@ async def last_command(ctx):
     return  
 
 @bot.command(name="delete_last",description="Delete the last command")
-async def delete_last(ctx):
+async def delete_last(ctx): 
 
     await ctx.response.send_message("Last command deleted from the History")
     if ctx.user.id not in Dictionnaire_User.keys():
@@ -270,7 +281,7 @@ async def delete_last(ctx):
 
 @bot.command(name="commande_liste",description="Liste des commandes")
 async def commande(ctx):
-    Commands = "**```Basic commands :```** \n Help \n Hello \n setup \n   **```Game```** \n plus_ou_moins \n pendu \n chifoumi  \n **```Extras```** \n Historique \n delete  ( delete X previous msg )\n delete_historique \n commande_liste \n chatbot \n"
+    Commands = "**```Basic commands :```** \n Help \n Hello \n setup \n   **```Game```** \n plus_ou_moins \n pendu \n chifoumi  \n **```Extras```** \n Historique \n delete  ( delete X previous msg )\n delete_historique \n commande_liste \n chatbot \n **```API```** \n mangaapi \n randommangas \n **```Extra```** \n conversation \n speakabout \n last_command \n last_command2 \n delete_last \n savedata \n savedataauto \n loaddata \n heure \n sync \n"
     await ctx.response.send_message("Liste des commandes : \n " +Commands  + "\n \n \n prefix : **;**")
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
