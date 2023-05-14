@@ -59,9 +59,12 @@ Le bot utilise un arbre binaire pour poser une série de questions prédéfinies
 
 /heure  ( affiche l'heure actuelle )
 
+/delete ( Permet d'efface X message, limité à 10 pour des raisons de sécurité ) 
+
 ### Data
 
 /savedataauto  Permet de sauvegardé les données jusqu'à avoir atteint la data spécifié
+
 
 
 ### Jeu
