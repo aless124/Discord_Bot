@@ -70,9 +70,14 @@ Le bot utilise un arbre binaire pour poser une série de questions prédéfinies
 
 /heure  ( affiche l'heure actuelle )
 
+/setup  ( Permet de modifier le prefix du bot )
+
+/commande_liste ( Affiche la liste des commandes actuellement disponible )
+
+
 /delete ( Permet d'efface X message, limité à 10 pour des raisons de sécurité ) 
 
-/setup  ( Permet de modifier le prefix du bot )
+
 ### Data
 
 /savedataauto  Permet de sauvegardé les données jusqu'à avoir atteint la data spécifié
