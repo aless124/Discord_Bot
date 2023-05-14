@@ -65,6 +65,7 @@ Le bot utilise un arbre binaire pour poser une série de questions prédéfinies
 
 /delete ( Permet d'efface X message, limité à 10 pour des raisons de sécurité ) 
 
+/setup  ( Permet de modifier le prefix du bot )
 ### Data
 
 /savedataauto  Permet de sauvegardé les données jusqu'à avoir atteint la data spécifié
@@ -92,9 +93,7 @@ Communication avec une API d'une base de données de mangas/manwha
 
 ## ToDo
 - Le bot dispose également d'un système de protection de l'historique via une file. Pour éviter que plusieurs personnes travaillent sur l'historique simultanément, l'accès à l'historique est limité à une seule personne à la fois.
-- Stockage des données dans une hashtable liée à l'id du compte Discord de l'utilisateur
-- Mise en place d'une solution pour éviter la perte de données en cas d'arrêt du bot
-- Ajout de fonctionnalités supplémentaires pour améliorer le bot Discord.
+
 
 
 ## Auteur
