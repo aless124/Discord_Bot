@@ -75,6 +75,9 @@ Communication avec une API d'une base de données de mangas/manwha
 /randommangas
 /mangaapi
 
+### Only Admin
+
+/sync  ( Permet de uploadé les commandes du bot instantanément sans attendre, doit être combiné à un CTRL+R sur discord pour tout mettre à jour )
 
 ## ToDo
 - Le bot dispose également d'un système de protection de l'historique via une file. Pour éviter que plusieurs personnes travaillent sur l'historique simultanément, l'accès à l'historique est limité à une seule personne à la fois.
