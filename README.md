@@ -58,6 +58,9 @@ Le bot utilise un arbre binaire pour poser une série de questions prédéfinies
 
 /last_command ( permet de voyagé entre les commandes de l'historique ) [ Not Working ]
 
+### HashTable
+
+/conversation    ( Permet d'afficher l'historique de conversation du user ) 
 
 ### Commandes pour la sauvegarde des données
 
