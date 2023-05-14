@@ -54,6 +54,11 @@ Le bot utilise un arbre binaire pour poser une série de questions prédéfinies
 
 /delete_last ( efface la derniere commande , ne fonctionne que s'il y a plus d'un élément dans l'historique ) 
 
+/last_command2 ( affiche la derniere commande rentré )
+
+/last_command ( permet de voyagé entre les commandes de l'historique ) [ Not Working ]
+
+
 ### Commandes pour la sauvegarde des données
 
 /savedata  Permet de sauvegardé les data des users ( leurs historiques ) dans un fichier JSON
