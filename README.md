@@ -61,6 +61,12 @@ API
 
 ### Jeu
 
+/pendu 
+
+/chifoumi 
+
+/plus_ou_moins
+
 
 ### Commande de l'API
 Communication avec une API d'une base de données de mangas/manwha
