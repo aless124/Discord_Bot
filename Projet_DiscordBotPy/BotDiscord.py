@@ -8,6 +8,7 @@ import time
 import classe.Liste as Liste
 import classe.Queue as Queue
 import classe.Arbre as Arbre
+import classe.hash as Hash
 import discord
 import os
 from dotenv import load_dotenv
@@ -35,6 +36,8 @@ client = discord.Client(intents=intents)
 
 # Global Variable 
 bot = app_commands.CommandTree(client)
+MyConversation = Hash.Hashtable([("User",["Content"])])
+
 Dictionnaire_User = {}
 FILENAME = "Projet_DiscordBotPy\json\data.json"
 global prefix
@@ -400,12 +403,23 @@ async def RandomMangas(ctx):
     except:
         await ctx.response.send_message(f'No Random Manga were found')
 
+
+@bot.command(name = "conversation", description = "User Conversation")
+async def UserConversation(interaction):
+    if interaction.user.id not in Dictionnaire_User.keys():
+        Dictionnaire_User[interaction.user.id] = Liste.doublyLinkedList()
+        print("User added to the dictionary")
+    Dictionnaire_User[interaction.user.id].InsertToEnd("conversation")
+    if MyConversation.get_value(str(interaction.user.id)) == None:
+        await interaction.response.send_message("No conversation found", ephemeral = True)
+    else:
+        await interaction.response.send_message(MyConversation.get_value(str(interaction.user.id)), ephemeral = True)
+
 @bot.command(name="speakabout",description="speack about X")
 async def speakabout(ctx,sujet:str):
     Arbre.T.first_question()        # return to the first question
-    py = "python"
-    
-    if py in Arbre.T.send_answer(sujet).lower():   
+    print(Arbre.T.send_answer(sujet).lower())
+    if sujet in Arbre.T.send_answer(sujet).lower():   
         await ctx.response.send_message("Le bot connait ce sujet")
     else:
         await ctx.response.send_message("Le bot ne connait pas ce sujet")
@@ -479,8 +493,10 @@ async def pendu(ctx):
     Dictionnaire_User[ctx.user.id].InsertToEnd("pendu")
     await ctx.response.send_message("Pendu choisit")
     await ctx.channel.send("Devinez le mot")
-    mot = "test"
-    mot = list(mot)
+    count = 0
+    mot = ["banane","pomme","poire","fraise","framboise","cerise","abricot","mangue","ananas","orange","citron","pamplemousse","kiwi","raisin","melon","pasteque","peche","prune","mirabelle","cerise","cassis","groseille","mure","myrtille","fraise","framboise","cerise","abricot","mangue","ananas","orange","citron","pamplemousse","kiwi","raisin","melon","pasteque","peche","prune","mirabelle","cerise","cassis","groseille","mure","myrtille"]
+    #mot = list(mot)
+    mot = mot[randint(0, len(mot)-1)]
     mot2 = []
     life = 9
     for i in range(len(mot)):
@@ -491,18 +507,27 @@ async def pendu(ctx):
     print(mot)
     def check(m):
         return m.author.id == ctx.user.id and m.channel == ctx.channel
-    while mot != mot2 or life != 0:
+    while mot != mot2 and life != 0:
+        print(life)
         n = await client.wait_for('message', check=check)
         n = n.content
         n = list(n)
         for i in range(len(mot)):
             if mot[i] == n[0]:
                 mot2[i] = n[0]
+                life += 1
+                count +=1
         print(mot2)
         await ctx.channel.send(mot2)
         life -= 1
-        await ctx.channel.send("Il vous reste " + str(life) + " vies")
-    await ctx.channel.send("Bravo")
+        if count == len(mot):
+            break
+        else:
+            await ctx.channel.send("Il vous reste " + str(life) + " vies")
+    if life == 0:
+        await ctx.channel.send("Vous avez perdu")
+    else:
+        await ctx.channel.send("Bravo")
 
 
 @bot.command(name="chifoumi")
@@ -568,8 +593,16 @@ async def on_message(message):
     global prefix
     time = datetime.today() # Le bot connait l'heure a chaque message
 
-
-    Commands = "**```Basic commands :```** \n Help \n Hello \n setup \n   **```Game```** \n plus_ou_moins \n pendu \n chifoumi  \n **```Extras```** \n Historique \n delete \n delete_historique \n commande_liste \n chatbot"
+    Commands = "**```Basic commands :```** \n Help \n Hello \n setup \n   **```Game```** \n plus_ou_moins \n pendu \n chifoumi  \n **```Extras```** \n Historique \n delete \n delete_historique \n commande_liste \n chatbot, \n mangaapi \n randommangas \n"
+    if message.author == client.user:
+        return
+    
+    content = MyConversation.get_value(str(message.author.id))
+    if content != None:
+        content.append(message.content)
+        MyConversation.update_bucket([(str(message.author.id), content)])
+    else:
+        MyConversation._assign_buckets([(str(message.author.id), [message.content])])
 
     if(message.content.startswith(prefix)):
         message.content = message.content[1:]
@@ -580,6 +613,8 @@ async def on_message(message):
 
         elif(message.content == "hello"):
             await message.channel.send("Bonjour ! Hi ! \n Enter ;Help for more information")
+        if (message.content == "help"):
+            await message.channel.send("Liste des commandes : \n " +Commands  + "\n \n \n prefix : **;**")
 
 #endregion
     

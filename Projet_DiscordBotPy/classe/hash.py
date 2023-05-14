@@ -1,19 +1,29 @@
-class hashtable_user:
-    def __init__(self,bucket_size):
-        self.buckets=[]
-        for i in range(bucket_size):
-            self.buckets.append([])
-        
-    def append(self,key,value):
-        hash_key = hash(key)
-        indice_bucket = hash_key % len(self.buckets)
-        self.buckets[indice_bucket].append((key,value))
+class Hashtable:
+    def __init__(self, elements):
+        self.bucket_size = len(elements)
+        self.buckets = [[] for i in range(self.bucket_size)]
+        self._assign_buckets(elements)
 
-    def get(self,key):
-        hash_key = hash(key)
-        indice_bucket = hash_key % len(self.buckets)
-        for k,v in self.buckets[indice_bucket]:
-            if k == key:
-                return v
+    def _assign_buckets(self, elements):
+        for key, value in elements:
+            hashed_value = hash(key)
+            index = hashed_value % self.bucket_size
+            self.buckets[index].append((key, value))
+
+    def get_value(self, input_key):
+        hashed_value = hash(input_key)
+        index = hashed_value % self.bucket_size
+        bucket = self.buckets[index]
+        for key, value in bucket:
+            if key == input_key:
+                return(value)
         return None
     
+    def update_bucket(self, elements):
+        for key, value in elements:
+            hashed_value = hash(key)
+            index = hashed_value % self.bucket_size
+            for k in enumerate(self.buckets[index]):
+                if k == key:
+                    self.buckets[index][k] = (k, value)
+                    return
