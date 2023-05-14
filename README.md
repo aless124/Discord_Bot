@@ -48,6 +48,10 @@ Le bot utilise un arbre binaire pour poser une série de questions prédéfinies
 
 ### Commandes de l'historique
 
+/historique ( affiche l'historique ) 
+
+/delete_historique ( Efface l'historique en entier )
+
 ### Commandes pour la sauvegarde des données
 
 /savedata  Permet de sauvegardé les data des users ( leurs historiques ) dans un fichier JSON
