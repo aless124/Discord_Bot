@@ -17,11 +17,11 @@ Les consignes sont à retrouver [ici](https://github.com/LordPouic/Python/blob/m
 ## Fonctionnalité de base
 
 
-- Stocker l'historique des commandes via une liste chaînée   [Working]
+- Stocker l'historique des commandes via une liste chaînée  
 - Via une file, créer un systeme permettant de protéger l'intégrité de l'historique
-- Via un arbre binaire , créer un système de discution  [Working]
+- Via un arbre binaire , créer un système de discution 
 - Via une hashtable, stocker soit l'historique
-- Sauvegarde des données du bot dans un Historique [Working]
+- Sauvegarde des données du bot dans un Historique 
 
 ## Installation
 
@@ -59,7 +59,7 @@ Le bot utilise un arbre binaire pour poser une série de questions prédéfinies
 
 /last_command2 ( affiche la derniere commande rentré )
 
-/last_command ( permet de voyagé entre les commandes de l'historique ) [ Not Working ]
+/last_command ( permet de voyagé entre les commandes de l'historique ) 
 
 ### HashTable
 
