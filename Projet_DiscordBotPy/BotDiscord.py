@@ -210,7 +210,7 @@ async def historique(ctx):
             counter = counter + 1
             i = str(counter)+". "+i
             await ctx.channel.send(i)
-        await ctx.response.send_message("Historique affiché")
+        await ctx.channel.send("Historique affiché")
    
 @bot.command(name="delete_historique",description="Delete the history of the bot")
 async def delete_historique(ctx):
@@ -284,7 +284,7 @@ async def commande(ctx):
     Commands = "**```Basic commands :```** \n Help \n Hello \n setup \n   **```Game```** \n plus_ou_moins \n pendu \n chifoumi  \n **```Extras```** \n Historique \n delete  ( delete X previous msg )\n delete_historique \n commande_liste \n chatbot \n **```API```** \n mangaapi \n randommangas \n **```Extra```** \n conversation \n speakabout \n last_command \n last_command2 \n delete_last \n savedata \n savedataauto \n loaddata \n heure \n sync \n"
     await ctx.response.send_message("Liste des commandes : \n " +Commands  + "\n \n \n prefix : **;**")
     if ctx.user.id not in Dictionnaire_User.keys():
-        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
+        Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()   
     Dictionnaire_User[ctx.user.id].InsertToEnd("commande_liste")
     return  
 '''
