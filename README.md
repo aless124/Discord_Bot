@@ -2,6 +2,9 @@
 
 Ce projet consiste à créer un bot Discord doté de plusieurs fonctionnalités telles qu'un historique des commandes, un système de questionnaire, une protection de l'historique, etc.
 
+Les consignes sont à retrouver [ici](https://github.com/LordPouic/Python/blob/main/Projet%20Bot%20B2)
+
+
 ## Table des matières
 - [Fonctionnalité de base](#fonctionnalité-de-base)
 - [Installation](#installation)
