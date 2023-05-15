@@ -106,16 +106,18 @@ Communication avec une API d'une base de données de mangas/manwha
 
 `/mangaapi`       - Pour avoir des informations sur un mangas spécifié 
 
+Communication avec une seconde API de nourriture
+
+`/searchrecipe`     - Pour avoir une liste de différente recette disponible 
+
+`/nutrition`        - Pour avoir des informations sur un aliment spécifié
+
+`/randommeal`       - Pour avoir une recette aléatoire avec une entrée, un plat et un dessert.
+
 ### Only Admin
 
 `/sync`  ( Permet de uploadé les commandes du bot instantanément sans attendre, doit être combiné à un CTRL+R sur discord pour tout mettre à jour )
 
-## ToDo
-- Le bot dispose également d'un système de protection de l'historique via une file. Pour éviter que plusieurs personnes travaillent sur l'historique simultanément, l'accès à l'historique est limité à une seule personne à la fois.
-
-- Ajouter une grosse fonctionnalité bonus :  
-
-- système  de lock : permet de lock l'historique pour éviter que plusieurs personnes travaillent dessus en même temps = faire des booleens
 
 
 ## Auteur
