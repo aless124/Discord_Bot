@@ -625,7 +625,7 @@ async def on_message(message):
         elif(message.content == "hello"):
             await message.channel.send("Bonjour ! Hi ! \n Enter ;Help for more information")
         if (message.content == "help"):
-            await message.channel.send("Liste des commandes : \n " +Commands  + "\n \n \n prefix : **;**")
+            await message.channel.send("Voici une partie des commandes : \n " +Commands  + "\n \n \n prefix : "+prefix)
 
 #endregion
     
