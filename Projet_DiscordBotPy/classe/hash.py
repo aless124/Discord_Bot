@@ -13,7 +13,7 @@ class Hashtable:
     def get_value(self, input_key):
         hashed_value = hash(input_key)
         index = hashed_value % self.bucket_size
-        bucket = self.buckets[index]
+        bucket = self.buckets[index]    
         for key, value in bucket:
             if key == input_key:
                 return(value)
