@@ -51,64 +51,64 @@ Le bot utilise un arbre binaire pour poser une série de questions prédéfinies
 
 ### Commandes de l'historique
 
-/historique ( affiche l'historique ) 
+`/historique` ( affiche l'historique ) 
 
-/delete_historique ( Efface l'historique en entier )
+`/delete_historique` ( Efface l'historique en entier )
 
-/delete_last ( efface la derniere commande , ne fonctionne que s'il y a plus d'un élément dans l'historique ) 
+`/delete_last` ( efface la derniere commande , ne fonctionne que s'il y a plus d'un élément dans l'historique ) 
 
-/last_command2 ( affiche la derniere commande rentré )
+`/last_command2` ( affiche la derniere commande rentré )
 
-/last_command ( permet de voyagé entre les commandes de l'historique ) 
+`/last_command` ( permet de voyagé entre les commandes de l'historique ) 
 
 ### HashTable
 
-/conversation    ( Permet d'afficher l'historique de conversation du user ) 
+`/conversation`    ( Permet d'afficher l'historique de conversation du user ) 
 
 ### Commandes pour la sauvegarde des données
 
-/savedata  Permet de sauvegardé les data des users ( leurs historiques ) dans un fichier JSON
+`/savedata`  Permet de sauvegardé les data des users ( leurs historiques ) dans un fichier JSON
 
-/loaddata Permet de charger les données depuis le fichier JSON
+`/loaddata` Permet de charger les données depuis le fichier JSON
 
 
 ## Fonctionnalité Bonus
 
-/heure  ( affiche l'heure actuelle )
+`/heure`  ( affiche l'heure actuelle )
 
-/setup  ( Permet de modifier le prefix du bot )
+`/setup`  ( Permet de modifier le prefix du bot )
 
-/commande_liste ( Affiche la liste des commandes actuellement disponible )
+`/commande_liste` ( Affiche la liste des commandes actuellement disponible )
 
 
-/delete ( Permet d'efface X message, limité à 10 pour des raisons de sécurité ) 
+`/delete` ( Permet d'efface X message, limité à 10 pour des raisons de sécurité ) 
 
 
 ### Data
 
-/savedataauto  Permet de sauvegardé les données jusqu'à avoir atteint la data spécifié
+`/savedataauto`  Permet de sauvegardé les données jusqu'à avoir atteint la data spécifié
 
 
 
 ### Jeu
 
-/pendu 
+`/pendu` 
 
-/chifoumi 
+`/chifoumi` 
 
-/plus_ou_moins
+`/plus_ou_moins`
 
 
 ### Commande de l'API
 Communication avec une API d'une base de données de mangas/manwha
 
-/randommangas   - Pour avoir un mangas/manwha aléatoire
+`/randommangas`   - Pour avoir un mangas/manwha aléatoire
 
-/mangaapi       - Pour avoir des informations sur un mangas spécifié 
+`/mangaapi`       - Pour avoir des informations sur un mangas spécifié 
 
 ### Only Admin
 
-/sync  ( Permet de uploadé les commandes du bot instantanément sans attendre, doit être combiné à un CTRL+R sur discord pour tout mettre à jour )
+`/sync`  ( Permet de uploadé les commandes du bot instantanément sans attendre, doit être combiné à un CTRL+R sur discord pour tout mettre à jour )
 
 ## ToDo
 - Le bot dispose également d'un système de protection de l'historique via une file. Pour éviter que plusieurs personnes travaillent sur l'historique simultanément, l'accès à l'historique est limité à une seule personne à la fois.
