@@ -40,8 +40,9 @@ MyConversation = Hash.Hashtable([("User",["Content"])])
 
 Dictionnaire_User = {}
 FILENAME = "Projet_DiscordBotPy\json\data.json"
-global prefix
 prefix = ";"
+LockSystem = False
+
 SaveArbre = Arbre.T
 
 #endregion
@@ -201,7 +202,8 @@ async def hello_setup(ctx):
             await ctx.channel.send(f'Language set to {Language}')
 
 @bot.command(name="historique",description="Display the history of the bot")
-async def historique(ctx): 
+async def historique(ctx):
+    global LockSystem 
     counter = 0
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
@@ -210,29 +212,40 @@ async def historique(ctx):
     if list_command == None:
         await ctx.response.send_message("No history")
     else:
-        for i in list_command:
-            counter = counter + 1
-            i = str(counter)+". "+i
-            await ctx.channel.send(i)
-        await ctx.response.send_message("Historique affiché")
+        if(LockSystem == False):
+            LockSystem = True
+            for i in list_command:
+                counter = counter + 1
+                i = str(counter)+". "+i
+                await ctx.channel.send(i)
+            await ctx.response.send_message("Historique affiché")
+            LockSystem = False
    
 @bot.command(name="delete_historique",description="Delete the history of the bot")
 async def delete_historique(ctx):
+    global LockSystem
     await ctx.response.send_message("History deleted")
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
-    Dictionnaire_User[ctx.user.id].DeleteAll()
+    if LockSystem == False:        
+        LockSystem = True
+        Dictionnaire_User[ctx.user.id].DeleteAll()
+        LockSystem = False
     
     return
 
 @bot.command(name="last_command2",description="Display the last command")
 async def last_command2(ctx):
+    global LockSystem
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
     if Dictionnaire_User[ctx.user.id].DisplayLast() == None:
         await ctx.response.send_message("No history")
     else:
-        await ctx.response.send_message("Last command : " + Dictionnaire_User[ctx.user.id].DisplayLast())
+        if LockSystem == False:
+            LockSystem = True
+            await ctx.response.send_message("Last command : " + Dictionnaire_User[ctx.user.id].DisplayLast())
+            LockSystem = False
     Dictionnaire_User[ctx.user.id].InsertToEnd("last_command")
     return
 
