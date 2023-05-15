@@ -453,6 +453,17 @@ async def RandomMangas(ctx):
     except:
         await ctx.response.send_message(f'No Random Manga were found')
 
+@bot.command(name="food_facts", description="Give a random fact about food")
+async def Food_Quizz(ctx):
+        api_key = os.getenv('APIMEAL_KEY')
+        response = requests.get(f'https://api.spoonacular.com/food/trivia/random?apiKey={api_key}')
+        data = response.json()
+        print(data)
+
+        if data['text']:
+            question = data['text']
+            await ctx.response.send_message(f"Facts : {question} ")
+
 
 @bot.command(name="randommeal", description="ask for a meal")
 async def RandomMeal(ctx):
@@ -479,7 +490,7 @@ async def RandomMeal(ctx):
         main_course = data_main_course['recipes'][0]['title']
         dessert = data_dessert['recipes'][0]['title']
 
-        await ctx.channel.send(f"Entrée : {appetizer}")
+        await ctx.response.send_message(f"Entrée : {appetizer}")
         await ctx.channel.send(f"Plat principal : {main_course}")
         await ctx.channel.send(f"Dessert : {dessert}")
 
@@ -492,7 +503,37 @@ async def SearchRecipe(ctx, recipe: str):
         for recipe in data['results']:
             await ctx.channel.send(f" ``` "+ recipe['title']+" ``` " + "\n"+recipe['image']) # type: ignore
     else:
-        await ctx.channel.send(f"No recipe found for {recipe}")
+        await ctx.response.send_message(f"No recipe found for {recipe}")
+
+@bot.command(name="recipe_info", description="Information about a recipe")
+async def RecipeInfo(ctx, recipe: str):
+    API_KEY = os.getenv('APIMEAL_KEY')
+    IdOfTheRecipe = requests.get(f"https://api.spoonacular.com/recipes/complexSearch?query={recipe}&apiKey={API_KEY}")
+    data = IdOfTheRecipe.json()
+    if data['results']:
+        for recipe in data['results']:
+            Id = recipe['id'] # type: ignore
+            response = requests.get(f"https://api.spoonacular.com/recipes/{Id}/information?apiKey={API_KEY}")
+            data = response.json()
+            if data['title']:
+                title = data['title']
+                await ctx.response.send_message(f" ``` "+ title+" ``` " + "\n"+data['image'])
+                await ctx.channel.send(f"Temps de préparation : {data['readyInMinutes']} minutes")
+                await ctx.channel.send(f"Temps de cuisson : {data['cookingMinutes']} minutes")
+                await ctx.channel.send(f"Nombre de personnes : {data['servings']}")
+                print(data)
+                if len(data['instructions']) > 2000:
+                    await ctx.channel.send(f"instructions : {data['instructions'][:2000]}")
+                    await ctx.channel.send(f"instructions : {data['instructions'][2000:]}")
+                
+                else:
+                    await ctx.channel.send(f"instructions : {data['instructions']}")
+                
+            else:
+                await ctx.response.send_message(f"No recipe found for {recipe}")
+    else:
+        await ctx.response.send_message(f"No recipe found for {recipe}")
+        
 
 @bot.command(name="nutrition", description="Valeur nutritionnelle d'un aliment ou d'une recette ")
 async def Nutrition(ctx, food: str):
@@ -502,7 +543,7 @@ async def Nutrition(ctx, food: str):
         data = response.json()
         print(data)
         if 'results' not in data:
-            await ctx.channel.send('Aucune recette trouvée.')
+            await ctx.response.send_message('Aucune recette trouvée.')
             return
         else:
             if data['results']:
@@ -512,13 +553,13 @@ async def Nutrition(ctx, food: str):
                 response = requests.get(f'https://api.spoonacular.com/recipes/{recipe_id}/nutritionWidget.json?apiKey={API_KEY}')
                 nutrition_data = response.json()
 
-                await ctx.channel.send(f"Informations nutritionnelles pour {food}:")
+                await ctx.response.send_message(f"Informations nutritionnelles pour {food}:")
                 await ctx.channel.send(f"Calories : {nutrition_data['calories']}")
                 await ctx.channel.send(f"Protéines : {nutrition_data['protein']}")
                 await ctx.channel.send(f"Lipides : {nutrition_data['fat']}")
                 await ctx.channel.send(f"Glucides : {nutrition_data['carbs']}")
             else:
-                await ctx.channel.send('Aucune recette trouvée.')
+                await ctx.response.send_message('Aucune recette trouvée.')
 @bot.command(name="conversation", description="User Conversation")
 async def UserConversation(interaction):
     if interaction.user.id not in Dictionnaire_User.keys():

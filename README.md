@@ -114,6 +114,9 @@ Communication avec une seconde API de nourriture
 
 `/randommeal`       - Pour avoir une recette aléatoire avec une entrée, un plat et un dessert.
 
+`/recipe_info`      - Pour avoir des informations sur une recette spécifié notamment sa préparation
+
+
 ### Only Admin
 
 `/sync`  ( Permet de uploadé les commandes du bot instantanément sans attendre, doit être combiné à un CTRL+R sur discord pour tout mettre à jour )
