@@ -58,7 +58,7 @@ def save_data(data):
 # Fonction pour charger les données depuis le fichier JSON
 def load_data():
     try:
-        with open(FILENAME, "r") as f:
+        with open(FILENAME, "r") as f:            
             return json.load(f)
     except FileNotFoundError:
         # Si le fichier n'existe pas encore, renvoyer un dictionnaire vide
@@ -125,8 +125,12 @@ async def loaddata(ctx):
     if ctx.user.id not in Dictionnaire_User.keys():
         Dictionnaire_User[ctx.user.id] = Liste.doublyLinkedList()
  
-    for i in Data[str(ctx.user.id)]:
-        Dictionnaire_User[ctx.user.id].InsertToEnd(i)
+    if Data[str(ctx.user.id)] == None:
+        await ctx.channel.send("No data to load")
+        return
+    else:
+        for i in Data[str(ctx.user.id)]:
+            Dictionnaire_User[ctx.user.id].InsertToEnd(i)
 
     await ctx.channel.send("Data loaded !")
    
@@ -210,7 +214,7 @@ async def historique(ctx):
             counter = counter + 1
             i = str(counter)+". "+i
             await ctx.channel.send(i)
-        await ctx.channel.send("Historique affiché")
+        await ctx.response.send_message("Historique affiché")
    
 @bot.command(name="delete_historique",description="Delete the history of the bot")
 async def delete_historique(ctx):
